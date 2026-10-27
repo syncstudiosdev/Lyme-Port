@@ -4,7 +4,7 @@ A responsive, dependency-free portfolio site built with plain HTML, CSS, and Jav
 
 ## Run locally
 
-Open `index.html` in a browser, or serve this folder with any static file server. The optional Discord integration and project links work best when served over HTTPS or localhost.
+Open `index.html` in a browser, or serve this folder with any static file server. Local media works when served over localhost; publish all project media files alongside the site.
 
 ## Add work cards
 
@@ -41,7 +41,7 @@ For example, add an asset entry like this and replace the paths and URL with you
 
 Add a `video` URL or local video path to each asset entry to show its Watch button. The same video field works for other categories if needed.
 
-The Everything filter shows two projects initially. Visitors can use **Show all projects** to expand the list or **Show fewer projects** to collapse it again. Each category filter, including Assets, shows all projects in that category. The included `aimpvid.mp4` and `Place1 - Roblox Studio 2026-10-24 18-03-14.mp4` are configured as Assets demos.
+The Everything filter shows two projects initially. Visitors can use **Show all projects** to expand the list or **Show fewer projects** to collapse it again. Each category filter, including Assets, shows all projects in that category. Project order is randomized on each page load. The included `vfx1.mp4` is configured as an Assets demo.
 
 Put local images in an `images` folder beside `portfolio.js`, or use an image path that matches where the file is stored. Only include statuses and metrics you can verify. The existing Oathbound entry keeps its name, Manager role, supplied image, and configured status; unknown player counts are not filled in.
 
@@ -56,14 +56,12 @@ In `portfolio.js`, `portfolioConfig.collaborations` is prefilled with Tidebound 
 
 `name` is required; `logo` and `link` are optional. Put logo files beside `portfolio.js` or use the correct relative path, and separate entries with commas. Only list current collaborations you have permission to share.
 
-## Optional Discord profile
+## Profile images and Discord links
 
-The site uses [Lanyard](https://github.com/Phineas/lanyard) only when `discordUserId` is configured in `portfolio.js`. The Discord user must opt in to Lanyard for their public profile to be available. Set the value to the user's numeric Discord ID; it is an identifier, not a secret. No bot token or private credential belongs in this static site.
+The profile card uses static local images configured with `profileAvatarImage` and `profileBannerImage` in `portfolio.js`. Keep those image files beside `portfolio.js` or update the values to their relative paths.
 
-When configured, the site displays a profile card with the user's name, Discord handle, avatar, and avatar decoration when Lanyard returns one, and links to their Discord profile. It does not display online/idle status. The card includes the site's Roblox development and studio-management focus. Network failures are reported to the browser console.
+Set `discordUserId` to the numeric Discord user ID to link the navigation profile and contact button to that Discord profile. The site does not fetch Discord profile data.
 
 ## Customize
-
-To change the Discord profile card banner, put an image beside `portfolio.js` and set `profileBannerImage` in that file to its filename, such as `"profile-banner.png"`. The banner image is slightly tilted and shadowed. Leave it empty to use the built-in abstract banner.
 
 The page content and responsive layout live in `index.html` and `styles.css`; no framework or package install is needed. Add only social/contact links that you want to publish and can verify.

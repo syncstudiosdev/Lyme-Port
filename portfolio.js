@@ -64,7 +64,7 @@ const portfolioConfig = {
 
         {
       category: "management",
-      title: "+1 Cut Grass Adevnture",
+      title: "+1 Cut Grass Adventure",
       role: "Content Creator Collector",
       status: "Active",
       releaseStatus: "Released",
@@ -96,8 +96,8 @@ const portfolioConfig = {
 
     {
       category: "management",
-      title: "Masekd.bio",
-      role: "Platform Co - Ordinator",
+      title: "Masked.bio",
+      role: "Platform Coordinator",
       status: "Active",
       releaseStatus: "In Dev",
       banner: "maskedbiobanner.gif",
@@ -321,7 +321,7 @@ function updatePortfolio(filter = "all", showAll = false) {
           preview.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(youtubeId)}?autoplay=1&mute=1&controls=0&loop=1&playlist=${encodeURIComponent(youtubeId)}&playsinline=1`;
           preview.hidden = false;
           card.querySelector(".banner-placeholder").hidden = true;
-        } else if (previewUrl.protocol === "https:" || previewUrl.protocol === "http:") {
+        } else if (["https:", "http:", "file:"].includes(previewUrl.protocol)) {
           const preview = card.querySelector(".asset-video-preview");
           preview.src = previewUrl.href;
           preview.hidden = false;
@@ -406,7 +406,7 @@ function openVideo(url) {
     iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
     iframe.allowFullscreen = true;
     videoFrame.append(iframe);
-  } else if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+  } else if (["https:", "http:", "file:"].includes(parsed.protocol)) {
     const video = document.createElement("video");
     video.src = parsed.href;
     video.controls = true;
