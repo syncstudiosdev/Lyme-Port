@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0a0a0b">
+    <meta name="description" content="LyMe - Roblox development, studio operations, and community leadership.">
+    <title>LyMe - Build with intention.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="portfolio.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <nav class="nav shell" aria-label="Main navigation">
+        <a class="wordmark" href="#home" aria-label="LyMe home">Ly<span>Me</span><i>.</i></a>
+        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-links">
+          <span></span><span></span>
+        </button>
+        <div class="nav-links" id="nav-links">
+          <a href="#work">Work</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <a class="discord-chip" id="nav-discord-link" href="#contact" aria-label="Discord profile">
+          <span class="avatar-wrap avatar-wrap--small">
+            <img class="discord-avatar" id="nav-avatar" alt="" hidden>
+            <span class="avatar-fallback" id="nav-avatar-fallback" aria-hidden="true"></span>
+          </span>
+          <span class="discord-chip-copy">
+            <span class="discord-name" id="nav-discord-name">LyMe</span>
+          </span>
+          <span class="chip-arrow" aria-hidden="true">↗</span>
+        </a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero shell" id="home">
+        <div class="hero-copy reveal">
+          <p class="eyebrow"><span class="eyebrow-line"></span> Entreaupeneur · Producer · Director</p>
+          <h1>Thoughtful work.<br><span>Built to last.</span></h1>
+          <p class="hero-intro">I’m <strong>LyMe</strong> - contributing to Roblox games through development and management, with a separate showcase of the assets and experiences I can create.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#work">Explore my work <span aria-hidden="true">↗</span></a>
+            <a class="button button-quiet" href="#contact">Let’s talk <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="hero-footnote"><span class="pulse-dot"></span> Independent by nature. Collaborative by design.</div>
+        </div>
+
+      </section>
+
+      <section class="signal-strip shell reveal" aria-label="Areas of focus">
+        <p>Where ideas<br>become experiences.</p>
+        <div class="signal-item"><span>01</span> Game development</div>
+        <div class="signal-item"><span>02</span> Game management</div>
+        <div class="signal-item"><span>03</span> Assets &amp; demos</div>
+      </section>
+
+      <section class="section work-section" id="work">
+        <div class="shell">
+          <div class="work-context reveal">
+            <div class="work-context-heading">
+              <p class="eyebrow"><span class="eyebrow-line"></span> The approach</p>
+              <h2>Player-first worlds.<br>Crafted with <span>care.</span></h2>
+            </div>
+            <div class="work-context-copy">
+              <p>Explore the games I contribute to as a developer or manager, then visit Assets for videos showing what I’ve made and what I can create.</p>
+              <div class="collaborations">
+                <span class="collaborations-label">CURRENTLY WORKING AT</span>
+                <div class="collaborator-list" id="collaborator-list" aria-label="Current collaborations"></div>
+                <p class="collaborations-empty" id="collaborations-empty">Featured collaborations will appear here.</p>
+              </div>
+            </div>
+          </div>
+          <div class="approach-grid reveal" aria-label="Areas of work">
+            <article class="approach-card">
+              <span class="approach-number">01</span>
+              <h3>Game development</h3>
+              <p>Roblox scripting and technical work, built around the experience players see and feel.</p>
+            </article>
+            <article class="approach-card">
+              <span class="approach-number">02</span>
+              <h3>Game management</h3>
+              <p>Helping game teams stay organized and creating a better experience for players and staff.</p>
+            </article>
+            <article class="approach-card">
+              <span class="approach-number">03</span>
+              <h3>Assets &amp; demos</h3>
+              <p>Video examples of the work I’ve made and the development skills I can bring to a project.</p>
+            </article>
+          </div>
+          <div class="work-divider"></div>
+          <div class="section-heading reveal">
+            <div>
+              <p class="eyebrow"><span class="eyebrow-line"></span> Selected work</p>
+              <h2>Projects with <span>purpose.</span></h2>
+            </div>
+            <p class="section-aside">Games I own or work on as a developer or manager, plus videos of what I can create.<span class="work-note">I've held several other positions, but these are my most significant ones.</span></p>
+          </div>
+          <div class="work-toolbar reveal">
+            <div class="filter-list" role="group" aria-label="Filter portfolio">
+              <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">Everything <span id="count-all">00</span></button>
+              <button class="filter-button" type="button" data-filter="development" aria-pressed="false">Development <span id="count-development">00</span></button>
+              <button class="filter-button" type="button" data-filter="management" aria-pressed="false">Management <span id="count-management">00</span></button>
+              <button class="filter-button" type="button" data-filter="development-assets" aria-pressed="false">Assets <span id="count-development-assets">00</span></button>
+              <button class="filter-button" type="button" data-filter="own" aria-pressed="false">Own <span id="count-own">00</span></button>
+            </div>
+            <span class="work-caption">Games and development showcases</span>
+          </div>
+          <div class="project-grid" id="project-grid" aria-live="polite"></div>
+          <button class="project-list-toggle" id="project-list-toggle" type="button" aria-controls="project-grid" aria-expanded="false" hidden>Show all projects</button>
+          <template id="project-card-template">
+            <article class="project-card reveal">
+              <div class="game-banner">
+                <img class="banner-image" alt="" loading="lazy" hidden>
+                <video class="asset-video-preview" muted autoplay loop playsinline preload="metadata" hidden></video>
+                <iframe class="asset-video-embed" title="Video preview" allow="autoplay; encrypted-media" loading="lazy" hidden></iframe>
+                <div class="banner-placeholder" aria-hidden="true">
+                  <span class="visual-orbit visual-orbit--one"></span>
+                  <span class="visual-orbit visual-orbit--two"></span>
+                  <span class="visual-symbol">✳</span>
+                </div>
+                <div class="banner-shade"></div>
+                <div class="banner-topline">
+                  <span class="project-tag"></span>
+                  <div class="project-badges">
+                    <span class="project-status project-status--lifecycle" hidden></span>
+                    <span class="project-release-status" hidden></span>
+                  </div>
+                </div>
+                <div class="banner-identity">
+                  <img class="project-pfp" alt="" loading="lazy" hidden>
+                  <span class="project-monogram" aria-hidden="true"></span>
+                  <div class="banner-title-group">
+                    <h3 class="project-title"></h3>
+                    <span class="project-role" hidden></span>
+                  </div>
+                </div>
+                <button class="video-trigger" type="button" hidden aria-label="Play project video">▶ <span>Watch</span></button>
+              </div>
+              <div class="game-card-details">
+                <div class="game-metrics"></div>
+                <div class="game-card-links">
+                  <a class="discord-server-link" hidden target="_blank" rel="noopener noreferrer">Discord server <span aria-hidden="true">↗</span></a>
+                  <a class="project-link" hidden target="_blank" rel="noopener noreferrer">View project <span aria-hidden="true">↗</span></a>
+                </div>
+              </div>
+            </article>
+          </template>
+          <div class="empty-work" id="empty-work" hidden>
+            <span class="empty-mark">✳</span>
+            <p>Good work takes care to show.</p>
+            <span>Project details are being gathered. Check back soon.</span>
+          </div>
+          <div class="video-modal" id="video-modal" hidden role="dialog" aria-modal="true" aria-label="Project video">
+            <button class="video-close" type="button" aria-label="Close video">×</button>
+            <div class="video-frame" id="video-frame"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section about-section" id="about">
+        <div class="shell about-layout">
+          <div class="about-intro reveal">
+            <p class="eyebrow"><span class="eyebrow-line"></span> A little about me</p>
+            <h2>Part builder.<br>Part <span>big picture.</span></h2>
+            <p>I care about what happens on both sides of a great experience: the craft behind the product, and the clarity, care, and collaboration that help a team deliver it.</p>
+            <p>My interests span Roblox and Luau development, creative problem-solving, community leadership, and the practical work of keeping projects and studios moving.</p>
+            <a class="text-link" href="#contact">Have something in mind? <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="about-panel reveal">
+            <div class="panel-heading"><span>MY TOOLKIT</span><span class="panel-status"><i></i> Always learning</span></div>
+            <div class="skill-group">
+              <span class="skill-label">DEVELOPMENT</span>
+              <div class="skill-pills"><span>Game Design & Planning</span><span>VFX</span><span>Python</span><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Luau</span></div>
+            </div>
+            <div class="skill-group">
+              <span class="skill-label">PEOPLE &amp; DELIVERY</span>
+              <div class="skill-pills"><span>Community management</span><span>Staff leadership</span><span>Project coordination</span><span>Studio operations</span><span>Development workflows</span></div>
+            </div>
+            <div class="panel-foot"><span class="foot-star">✳</span><span>Curious about the details.<br>Committed to the whole picture.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-section" id="contact">
+        <div class="contact-glow" aria-hidden="true"></div>
+        <div class="shell contact-layout">
+          <div class="contact-copy reveal">
+            <p class="eyebrow"><span class="eyebrow-line"></span> Start a conversation</p>
+            <h2>Have a good<br>one in <span>mind?</span></h2>
+            <p>For a project, a team, or simply a thoughtful exchange - my inbox is open.</p>
+            <a class="button button-primary contact-button" id="contact-discord-link" href="#contact-profile">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19.7 5.2a18.5 18.5 0 0 0-4.6-1.4l-.6 1.2a17 17 0 0 0-5 0L8.9 3.8a18.4 18.4 0 0 0-4.6 1.4C1.4 9.4.6 13.5 1 17.5a18.7 18.7 0 0 0 5.7 2.9l1.2-2a12 12 0 0 1-1.9-.9l.5-.4c3.7 1.7 7.8 1.7 11.4 0l.6.4a12 12 0 0 1-2 .9l1.2 2a18.6 18.6 0 0 0 5.7-2.9c.5-4.6-.8-8.7-3.7-12.3ZM8.7 14.8c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Zm6.6 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Z"/></svg>
+              <span id="contact-discord-label">Discord not connected</span><span aria-hidden="true">↗</span>
+            </a>
+            <span class="contact-note" id="contact-discord-note">Add your Discord user ID in portfolio.js to enable direct contact.</span>
+          </div>
+          <aside class="contact-profile glass-panel reveal" id="contact-profile" aria-label="Discord profile">
+            <div class="profile-banner">
+              <img class="profile-banner-image" id="profile-banner-image" alt="" hidden>
+              <span>ENTREAUPENEUR · PRODUCER · DIRECTOR</span>
+            </div>
+            <div class="profile-content">
+              <div class="avatar-wrap avatar-wrap--large">
+                <img class="discord-avatar" id="contact-avatar" alt="" hidden>
+                <span class="avatar-fallback" id="contact-avatar-fallback" aria-hidden="true"></span>
+                <img class="decoration-image" id="discord-decoration" alt="" hidden>
+              </div>
+              <h3 id="contact-discord-name">LyMe</h3>
+              <div class="profile-tags">
+                <span>Roblox development</span>
+                <span>Studio operations</span>
+                <span>Community leadership</span>
+              </div>
+              <p class="profile-bio">I enjoy building games, working with talented people, and turning ideas into projects that actually go somewhere. Whether I’m making VFX, scripting, managing a team, or helping shape a game, I like being involved in the process from start to finish.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-inner">
+        <a class="wordmark footer-wordmark" href="#home">Ly<span>Me</span><i>.</i></a>
+        <p>Independent spirit. Intentional work.</p>
+        <a href="#home" class="back-to-top">Back to top ↑</a>
+        <span class="copyright">© <span id="current-year"></span> LyMe</span>
+      </div>
+    </footer>
+  </body>
+</html>
