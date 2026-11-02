@@ -1,12 +1,16 @@
 const portfolioConfig = {
   // Used to link directly to the Discord profile.
   discordUserId: "1270007167541575854",
+  // Optional: add a Discord bot token to fetch live profile data.
+  // For a static site, set this in the hosting environment or via window.DISCORD_API_TOKEN.
+  discordApiToken: (typeof window !== "undefined" && (window.DISCORD_API_TOKEN || window.discordApiToken)) || "",
   profileAvatarImage: "pfp.jpg",
   profileBannerImage: "banner.jpg",
   collaborations: [
     // Copy this entry for each additional studio; logo and link are optional.
-    { name: "Tidebound", logo: "tidebound.png", link: "https://www.tideboundrblx.com/" },
+    { name: "SDS", logo: "SDS.png", link: "https://sushideluxe.gg/" },
     { name: "ACT2", logo: "act2.png", link: "https://www.act2studios.co/" },
+    { name: "Aquartz", logo: "Aquartz.png", link: "" },
   ],
   projects: [
     // DEVELOPMENT TEMPLATE: copy this object, then replace the example values.
@@ -20,6 +24,9 @@ const portfolioConfig = {
       banner: "ryftbanner.png",
       pfp: "ryft.png",
       technology: "",
+      tags: ["Game Production", "Creative Direction", "Development"],
+      description: "Building a creative studio identity around player-first experiences, polished execution, and long-term vision.",
+      attribution: "Founder-led studio",
       peakCcu: "",
       discordMembers: "300+",
       currentCcu: "",
@@ -37,6 +44,9 @@ const portfolioConfig = {
       banner: "slime.png",
       pfp: "slime.png",
       technology: "",
+      tags: ["Project Management", "Creative Direction", "Community Management"],
+      description: "A self-directed project focused on building community, gameplay direction, and a coherent player experience from the ground up.",
+      attribution: "Independent project",
       peakCcu: "",
       discordMembers: "200+",
       currentCcu: "",
@@ -60,6 +70,22 @@ const portfolioConfig = {
       totalVisits: "",
       link: "",
       discordLink: "https://discord.gg/u4BpEerU6H"
+    },
+
+    {
+      category: "management",
+      title: "Wizardry",
+      role: "Community Manager",
+      status: "Active",
+      releaseStatus: "In Dev",
+      banner: "Wizardrybanner.jpg",
+      pfp: "Wizardry.webp",
+      peakCcu: "",
+      discordMembers: "200+",
+      currentCcu: "",
+      totalVisits: "",
+      link: "",
+      discordLink: "https://discord.gg/qnJD8cjkE5"
     },
 
         {
@@ -150,6 +176,8 @@ const portfolioConfig = {
     {
       category: "development-assets",
       title: "Basic VFX Pack",
+      tags: ["VFX", "Development", "Creative Direction"],
+      description: "A concise showcase of visual effects work and stylised motion design suited to Roblox and game-focused creative pipelines.",
       banner: "ryftbanner.png",
       video: "vfx1.mp4"
     },
@@ -264,8 +292,27 @@ function updatePortfolio(filter = "all", showAll = false) {
     card.classList.add(`project-card--${project.category}`);
     const isAsset = project.category === "development-assets";
     card.querySelector(".project-title").textContent = project.title || "Untitled project";
-    const category = project.technology || projectCategories[project.category];
-    card.querySelector(".project-tag").textContent = category;
+
+    const tagList = card.querySelector(".project-tag-list");
+    const tags = [];
+    const rawTags = Array.isArray(project.tags) ? project.tags : [];
+    for (const tag of rawTags) {
+      const label = String(tag || "").trim();
+      if (label && !tags.includes(label)) tags.push(label);
+    }
+    const categoryTag = project.technology || projectCategories[project.category];
+    if (categoryTag && !tags.includes(categoryTag)) tags.unshift(categoryTag);
+    if (tags.length === 0) {
+      tagList.hidden = true;
+    } else {
+      tagList.replaceChildren();
+      for (const tag of tags) {
+        const tagChip = document.createElement("span");
+        tagChip.className = "project-tag";
+        tagChip.textContent = tag;
+        tagList.append(tagChip);
+      }
+    }
 
     const lifecycleStatus = String(project.status || "").trim().toLowerCase();
     if (projectStatusLabels[lifecycleStatus]) {
@@ -338,6 +385,18 @@ function updatePortfolio(filter = "all", showAll = false) {
       const role = card.querySelector(".project-role");
       role.textContent = project.role;
       role.hidden = false;
+    }
+
+    const description = card.querySelector(".project-description");
+    if (project.description) {
+      description.textContent = project.description;
+      description.hidden = false;
+    }
+
+    const attribution = card.querySelector(".project-attribution");
+    if (project.attribution) {
+      attribution.textContent = project.attribution;
+      attribution.hidden = false;
     }
 
     const metricDefinitions = [
@@ -444,7 +503,27 @@ function setAvatar(image, fallback, url, name) {
   }, { once: true });
 }
 
-function configureDiscordProfile() {
+function buildDiscordAvatarUrl(userId, avatarHash, size = 256) {
+  if (!userId || !avatarHash) return "";
+  const extension = avatarHash.startsWith("a_") ? "gif" : "png";
+  return `https://cdn.discordapp.com/avatars/${encodeURIComponent(userId)}/${encodeURIComponent(avatarHash)}.${extension}?size=${size}`;
+}
+
+function applyDiscordProfileData(profile) {
+  if (!profile || !profile.id) return;
+
+  const username = profile.global_name || profile.username || "LyMe";
+  const avatarUrl = buildDiscordAvatarUrl(profile.id, profile.avatar);
+
+  document.querySelectorAll("#nav-discord-name, #contact-discord-name").forEach((element) => {
+    element.textContent = username;
+  });
+
+  setAvatar(document.querySelector("#nav-avatar"), document.querySelector("#nav-avatar-fallback"), avatarUrl, username);
+  setAvatar(document.querySelector("#contact-avatar"), document.querySelector("#contact-avatar-fallback"), avatarUrl, username);
+}
+
+async function configureDiscordProfile() {
   const userId = portfolioConfig.discordUserId.trim();
   if (!/^\d{17,20}$/.test(userId)) return;
 
@@ -452,6 +531,31 @@ function configureDiscordProfile() {
   for (const link of [navLink, contactLink]) safeExternalLink(link, profileUrl);
   document.querySelector("#contact-discord-label").textContent = "Open Discord profile";
   document.querySelector("#contact-discord-note").textContent = "Send a message through my Discord profile.";
+
+  const token = (portfolioConfig.discordApiToken || "").trim();
+  if (!token) return;
+
+  try {
+    const response = await fetch(`https://discord.com/api/v10/users/${encodeURIComponent(userId)}`, {
+      headers: {
+        Authorization: `Bot ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Discord API request failed (${response.status})`);
+    }
+
+    const profile = await response.json();
+    if (!profile || !profile.id) {
+      throw new Error("No Discord profile data returned.");
+    }
+
+    applyDiscordProfileData(profile);
+  } catch (error) {
+    console.warn("Unable to fetch Discord profile data via API:", error);
+  }
 }
 
 function loadProfileAvatar() {

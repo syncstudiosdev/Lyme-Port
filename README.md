@@ -60,7 +60,7 @@ In `portfolio.js`, `portfolioConfig.collaborations` is prefilled with Tidebound 
 
 The profile card uses static local images configured with `profileAvatarImage` and `profileBannerImage` in `portfolio.js`. Keep those image files beside `portfolio.js` or update the values to their relative paths.
 
-Set `discordUserId` to the numeric Discord user ID to link the navigation profile and contact button to that Discord profile. The site does not fetch Discord profile data.
+Set `discordUserId` to the numeric Discord user ID to link the navigation profile and contact button to that Discord profile. If you add a Discord bot token to `discordApiToken`, the site will fetch and display the live profile name and avatar automatically; otherwise it keeps the static profile assets and direct profile link.
 
 ## Customize
 

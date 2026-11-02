@@ -157,9 +157,12 @@ h2 span { color: #85847f; }
 .visual-symbol { color: var(--accent); font-size: 35px; text-shadow: 0 0 24px rgba(215,122,244,.5); }
 .banner-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,7,10,.55), transparent 38%, rgba(8,7,10,.12) 56%, rgba(8,7,10,.9)); }
 .banner-topline { position: absolute; z-index: 1; inset: 15px 16px auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.project-tag-list { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; max-width: calc(100% - 120px); }
 .project-tag, .project-status, .project-release-status { display: inline-flex; align-items: center; min-height: 31px; padding: 6px 10px; border: 1px solid rgba(255,255,255,.2); border-radius: 10px; background: linear-gradient(135deg, rgba(24,22,27,.75), rgba(12,10,14,.55)); box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 4px 12px rgba(0,0,0,.12); color: #f2edf4; font-size: 12px; font-weight: 600; backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); }
 .project-badges { display: flex; flex-wrap: wrap; justify-content: end; gap: 7px; }
 .project-status, .project-release-status { gap: 7px; }
+.project-description { margin: 0; padding: 18px 18px 0; color: #b9b7be; font-size: 14px; line-height: 1.8; }
+.project-attribution { margin: 0; padding: 10px 18px 0; color: #8b8a8f; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
 .project-status::before, .project-release-status::before { width: 7px; height: 7px; border-radius: 50%; background: #9b98a0; content: ""; }
 .project-status--active::before { background: #5fe0a1; box-shadow: 0 0 9px rgba(95,224,161,.55); }
 .project-status--retired::before { background: #96919b; }
