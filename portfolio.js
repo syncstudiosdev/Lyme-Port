@@ -3,9 +3,9 @@ const portfolioConfig = {
   discordUserId: "1270007167541575854",
   // Optional: add a Discord bot token to fetch live profile data.
   // For a static site, set this in the hosting environment or via window.DISCORD_API_TOKEN.
-  discordApiToken: (typeof window !== "undefined" && (window.DISCORD_API_TOKEN || window.discordApiToken)) || "",
-  profileAvatarImage: "pfp.jpg",
-  profileBannerImage: "banner.jpg",
+  discordApiToken: (typeof window !== "undefined" && (window.DISCORD_API_TOKEN || window.discordApiToken || window.__DISCORD_API_TOKEN__)) || "",
+  profileAvatarImage: "",
+  profileBannerImage: "",
   collaborations: [
     // Copy this entry for each additional studio; logo and link are optional.
     { name: "SDS", logo: "SDS.png", link: "https://sushideluxe.gg/" },
@@ -503,17 +503,19 @@ function setAvatar(image, fallback, url, name) {
   }, { once: true });
 }
 
-function buildDiscordAvatarUrl(userId, avatarHash, size = 256) {
-  if (!userId || !avatarHash) return "";
-  const extension = avatarHash.startsWith("a_") ? "gif" : "png";
-  return `https://cdn.discordapp.com/avatars/${encodeURIComponent(userId)}/${encodeURIComponent(avatarHash)}.${extension}?size=${size}`;
+function buildDiscordImageUrl(type, userId, assetHash, size = 256) {
+  if (!userId || !assetHash) return "";
+  const extension = assetHash.startsWith("a_") ? "gif" : "png";
+  return `https://cdn.discordapp.com/${type}/${encodeURIComponent(userId)}/${encodeURIComponent(assetHash)}.${extension}?size=${size}`;
 }
 
 function applyDiscordProfileData(profile) {
   if (!profile || !profile.id) return;
 
   const username = profile.global_name || profile.username || "LyMe";
-  const avatarUrl = buildDiscordAvatarUrl(profile.id, profile.avatar);
+  const avatarUrl = buildDiscordImageUrl("avatars", profile.id, profile.avatar, 256);
+  const bannerUrl = profile.banner ? buildDiscordImageUrl("banners", profile.id, profile.banner, 1024) : "";
+  const decorationAsset = profile.avatar_decoration_data?.asset;
 
   document.querySelectorAll("#nav-discord-name, #contact-discord-name").forEach((element) => {
     element.textContent = username;
@@ -521,16 +523,40 @@ function applyDiscordProfileData(profile) {
 
   setAvatar(document.querySelector("#nav-avatar"), document.querySelector("#nav-avatar-fallback"), avatarUrl, username);
   setAvatar(document.querySelector("#contact-avatar"), document.querySelector("#contact-avatar-fallback"), avatarUrl, username);
+
+  const profileBanner = document.querySelector(".profile-banner");
+  const profileBannerImage = document.querySelector("#profile-banner-image");
+  if (bannerUrl) {
+    profileBannerImage.src = bannerUrl;
+    profileBannerImage.hidden = false;
+    profileBanner.classList.add("has-discord-banner");
+    profileBannerImage.addEventListener("error", () => {
+      profileBannerImage.hidden = true;
+      profileBanner.classList.remove("has-discord-banner");
+    }, { once: true });
+  } else {
+    profileBannerImage.hidden = true;
+    profileBanner.classList.remove("has-discord-banner");
+  }
+
+  const decorationImage = document.querySelector("#discord-decoration");
+  if (decorationAsset) {
+    decorationImage.src = `https://cdn.discordapp.com/avatar-decoration-presets/${encodeURIComponent(decorationAsset)}.png?size=256`;
+    decorationImage.alt = "";
+    decorationImage.hidden = false;
+    decorationImage.addEventListener("error", () => {
+      decorationImage.hidden = true;
+    }, { once: true });
+  } else {
+    decorationImage.hidden = true;
+  }
+
+  document.querySelector("#contact-discord-note").textContent = "Profile synced with your Discord account.";
 }
 
-async function configureDiscordProfile() {
+async function fetchDiscordProfileData() {
   const userId = portfolioConfig.discordUserId.trim();
   if (!/^\d{17,20}$/.test(userId)) return;
-
-  const profileUrl = `https://discord.com/users/${encodeURIComponent(userId)}`;
-  for (const link of [navLink, contactLink]) safeExternalLink(link, profileUrl);
-  document.querySelector("#contact-discord-label").textContent = "Open Discord profile";
-  document.querySelector("#contact-discord-note").textContent = "Send a message through my Discord profile.";
 
   const token = (portfolioConfig.discordApiToken || "").trim();
   if (!token) return;
@@ -555,6 +581,21 @@ async function configureDiscordProfile() {
     applyDiscordProfileData(profile);
   } catch (error) {
     console.warn("Unable to fetch Discord profile data via API:", error);
+  }
+}
+
+async function configureDiscordProfile() {
+  const userId = portfolioConfig.discordUserId.trim();
+  if (!/^\d{17,20}$/.test(userId)) return;
+
+  const profileUrl = `https://discord.com/users/${encodeURIComponent(userId)}`;
+  for (const link of [navLink, contactLink]) safeExternalLink(link, profileUrl);
+  document.querySelector("#contact-discord-label").textContent = "Open Discord profile";
+
+  await fetchDiscordProfileData();
+
+  if (!document.querySelector("#contact-discord-note").textContent.includes("synced")) {
+    document.querySelector("#contact-discord-note").textContent = "Send a message through my Discord profile.";
   }
 }
 
@@ -639,3 +680,8 @@ observeReveals();
 loadProfileAvatar();
 loadProfileBanner();
 configureDiscordProfile();
+setInterval(() => {
+  if (document.visibilityState === "visible") {
+    configureDiscordProfile();
+  }
+}, 5 * 60 * 1000);

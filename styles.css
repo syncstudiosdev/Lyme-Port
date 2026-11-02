@@ -230,12 +230,14 @@ h2 span { color: #85847f; }
 .contact-note { display: block; max-width: 310px; margin-top: 10px; color: #aaa7af; font-size: 12px; line-height: 1.6; }
 .glass-panel { border: 1px solid rgba(255,255,255,.14); border-radius: 18px; background: linear-gradient(135deg, rgba(255,255,255,.085), rgba(255,255,255,.025) 60%, rgba(215,122,244,.025)); box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 24px 58px rgba(0,0,0,.28); backdrop-filter: blur(26px) saturate(140%); -webkit-backdrop-filter: blur(26px) saturate(140%); }
 .contact-profile { overflow: hidden; padding: 0; transform: rotate(-1deg); box-shadow: 0 28px 65px rgba(0,0,0,.48), 0 8px 24px rgba(215,122,244,.08); }
-.profile-banner { position: relative; display: flex; height: 116px; align-items: start; overflow: hidden; padding: 17px 20px; background: #171518; }
+.profile-banner { position: relative; display: flex; height: 150px; align-items: start; overflow: hidden; padding: 20px 22px; background: #171518; }
 .profile-banner-image { position: absolute; z-index: 0; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
 .profile-banner-image[hidden] { display: none; }
 .profile-banner::before { position: absolute; z-index: 0; inset: 0; background: radial-gradient(ellipse at 78% 32%, rgba(215,122,244,.3), transparent 43%), linear-gradient(125deg, #211927, #151417 62%, #26202a); content: ""; }
+.profile-banner.has-discord-banner::before { background: linear-gradient(180deg, rgba(0,0,0,.4), transparent 40%, rgba(0,0,0,.18)); }
 .profile-banner::after { position: absolute; right: -28px; bottom: -88px; width: 230px; height: 160px; border: 1px solid rgba(230,190,240,.16); border-radius: 50%; content: ""; transform: rotate(-28deg); }
 .profile-banner::after { right: 13px; bottom: -105px; width: 170px; border-color: rgba(255,255,255,.1); transform: rotate(27deg); }
+.profile-banner.has-discord-banner::after { opacity: .35; }
 .profile-banner span { position: relative; z-index: 1; color: #d9cbdc; font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-shadow: 0 2px 8px rgba(0,0,0,.75); }
 .profile-content { padding: 0 22px 23px; }
 .contact-profile .avatar-wrap--large { z-index: 1; width: 112px; height: 112px; margin-top: -56px; border: 4px solid #171518; border-radius: 25px; background: #211c24; box-shadow: 0 8px 26px rgba(0,0,0,.45); }

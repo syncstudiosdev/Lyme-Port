@@ -56,11 +56,11 @@ In `portfolio.js`, `portfolioConfig.collaborations` is prefilled with Tidebound 
 
 `name` is required; `logo` and `link` are optional. Put logo files beside `portfolio.js` or use the correct relative path, and separate entries with commas. Only list current collaborations you have permission to share.
 
-## Profile images and Discord links
+## Discord profile and links
 
-The profile card uses static local images configured with `profileAvatarImage` and `profileBannerImage` in `portfolio.js`. Keep those image files beside `portfolio.js` or update the values to their relative paths.
+Set `discordUserId` to the numeric Discord user ID to link the navigation profile and contact button to that Discord profile. When the API token is available, the site fetches the current display name, avatar, banner, and avatar decoration on page load, then refreshes every five minutes while the page is visible.
 
-Set `discordUserId` to the numeric Discord user ID to link the navigation profile and contact button to that Discord profile. If you add a Discord bot token to `discordApiToken`, the site will fetch and display the live profile name and avatar automatically; otherwise it keeps the static profile assets and direct profile link.
+This static site reads the token from `window.DISCORD_API_TOKEN`, `window.discordApiToken`, or `window.__DISCORD_API_TOKEN__`. Static hosting environment variables are not exposed to browser JavaScript automatically; do not inject a Discord bot token into a public page, because visitors can retrieve it. Use a server-side function/proxy that reads the host's environment variable and calls the Discord API. Without the token, the page still links to the Discord profile but cannot sync its images or name.
 
 ## Customize
 
