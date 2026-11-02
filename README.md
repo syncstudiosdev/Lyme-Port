@@ -58,9 +58,11 @@ In `portfolio.js`, `portfolioConfig.collaborations` is prefilled with Tidebound 
 
 ## Discord profile and links
 
-Set `discordUserId` to the numeric Discord user ID to link the navigation profile and contact button to that Discord profile. When the API token is available, the site fetches the current display name, avatar, banner, and avatar decoration on page load, then refreshes every five minutes while the page is visible.
+Set `discordUserId` in `portfolio.js` to the numeric Discord user ID to link the navigation profile and contact button to that Discord profile. The Netlify function fetches the current display name, avatar, banner, and avatar decoration on page load, then refreshes every five minutes while the page is visible.
 
-This static site reads the token from `window.DISCORD_API_TOKEN`, `window.discordApiToken`, or `window.__DISCORD_API_TOKEN__`. Static hosting environment variables are not exposed to browser JavaScript automatically; do not inject a Discord bot token into a public page, because visitors can retrieve it. Use a server-side function/proxy that reads the host's environment variable and calls the Discord API. Without the token, the page still links to the Discord profile but cannot sync its images or name.
+On Netlify, add `DISCORD_API_TOKEN` under **Site configuration → Environment variables**, allow it for Functions, and redeploy. The token is read server-side by `netlify/functions/discord-profile.js` and is never sent to the browser. The function's `DISCORD_USER_ID` constant must match `discordUserId` in `portfolio.js` if you change the profile ID.
+
+Custom status is not included in the Discord user API response. Showing it live requires a separate, continuously running Discord Gateway bot with the Presence intent enabled and a shared server with the account; this Netlify function does not provide status updates.
 
 ## Customize
 

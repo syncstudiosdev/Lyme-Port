@@ -1,9 +1,6 @@
 const portfolioConfig = {
   // Used to link directly to the Discord profile.
   discordUserId: "1270007167541575854",
-  // Optional: add a Discord bot token to fetch live profile data.
-  // For a static site, set this in the hosting environment or via window.DISCORD_API_TOKEN.
-  discordApiToken: (typeof window !== "undefined" && (window.DISCORD_API_TOKEN || window.discordApiToken || window.__DISCORD_API_TOKEN__)) || "",
   profileAvatarImage: "",
   profileBannerImage: "",
   collaborations: [
@@ -558,19 +555,14 @@ async function fetchDiscordProfileData() {
   const userId = portfolioConfig.discordUserId.trim();
   if (!/^\d{17,20}$/.test(userId)) return;
 
-  const token = (portfolioConfig.discordApiToken || "").trim();
-  if (!token) return;
-
   try {
-    const response = await fetch(`https://discord.com/api/v10/users/${encodeURIComponent(userId)}`, {
-      headers: {
-        Authorization: `Bot ${token}`,
-        "Content-Type": "application/json",
-      },
+    const response = await fetch("/.netlify/functions/discord-profile", {
+      headers: { Accept: "application/json" },
+      cache: "no-store",
     });
 
     if (!response.ok) {
-      throw new Error(`Discord API request failed (${response.status})`);
+      throw new Error(`Discord profile service failed (${response.status})`);
     }
 
     const profile = await response.json();
@@ -581,6 +573,8 @@ async function fetchDiscordProfileData() {
     applyDiscordProfileData(profile);
   } catch (error) {
     console.warn("Unable to fetch Discord profile data via API:", error);
+    document.querySelector("#contact-discord-note").textContent =
+      "Discord profile sync is unavailable. Check the Netlify function setup.";
   }
 }
 
