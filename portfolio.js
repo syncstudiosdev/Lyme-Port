@@ -7,7 +7,7 @@ const portfolioConfig = {
     // Copy this entry for each additional studio; logo and link are optional.
     { name: "SDS", logo: "SDS.png", link: "https://sushideluxe.gg/" },
     { name: "ACT2", logo: "act2.png", link: "https://www.act2studios.co/" },
-    { name: "Aquartz", logo: "Aquartz.png", link: "" },
+    { name: "Overtake", logo: "Overtake.png", link: "https://ovtk.cc/" },
   ],
   projects: [
     // DEVELOPMENT TEMPLATE: copy this object, then replace the example values.
