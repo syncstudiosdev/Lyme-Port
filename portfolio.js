@@ -14,12 +14,12 @@ const portfolioConfig = {
     
     {
       category: "own",
-      title: "Ryft Entertainment",
+      title: "FLux",
       role: "Chief Executive Officer + Founder",
       status: "Active", // optional lifecycle status: "active" or "retired"
       releaseStatus: "", // optional release stage: "in-dev", "released", or "unreleased"
-      banner: "ryftbanner.png",
-      pfp: "ryft.png",
+      banner: "fluxbanner.png",
+      pfp: "FLUX.png",
       technology: "",
       tags: ["Game Production", "Creative Direction", "Development"],
       description: "Building a creative studio identity around player-first experiences, polished execution, and long-term vision.",
@@ -28,7 +28,7 @@ const portfolioConfig = {
       discordMembers: "300+",
       currentCcu: "",
       totalVisits: "",
-      link: "https://ryftentertainment.netlify.app/",
+      link: "",
       discordLink: "https://discord.gg/MWZu7gMrg7",
     },
 
