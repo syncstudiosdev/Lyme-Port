@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#100d07">
+    <meta name="description" content="Games, studios, and communities LyMe has worked with.">
+    <title>Work - LyMe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="portfolio.js" defer></script>
+  </head>
+  <body data-page="work" data-section="work">
+    <div class="page-transition" aria-hidden="true">
+      <img src="pfp.jpg" alt="">
+    </div>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <nav class="nav shell" aria-label="Main navigation">
+        <a class="wordmark" href="index.html#home" aria-label="LyMe home">Ly<span>Me</span><i>.</i></a>
+        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-links">
+          <span></span><span></span>
+        </button>
+        <div class="nav-links" id="nav-links">
+          <a href="index.html#home">Home</a>
+          <a href="index.html#about">About me</a>
+          <a href="index.html#what-i-do">What I do</a>
+          <a href="work.html" aria-current="page">Work</a>
+          <a href="index.html#contact">Contact</a>
+        </div>
+        <a class="discord-chip" id="nav-discord-link" href="https://discord.com/users/1270007167541575854" aria-label="Discord profile">
+          <span class="avatar-wrap avatar-wrap--small">
+            <img class="discord-avatar" id="nav-avatar" alt="" hidden>
+            <span class="avatar-fallback" id="nav-avatar-fallback" aria-hidden="true"></span>
+          </span>
+          <span class="discord-chip-copy">
+            <span class="discord-name" id="nav-discord-name">LyMe</span>
+          </span>
+          <span class="chip-arrow" aria-hidden="true">↗</span>
+        </a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="section work-section work-page-section" id="work">
+        <div class="shell">
+          <div class="work-page-intro reveal">
+            <p class="eyebrow"><span class="eyebrow-line"></span> Selected work</p>
+            <h1>Games and studios I've <span>worked with.</span></h1>
+            <p>Projects I've contributed to through management, production, and ownership.</p>
+          </div>
+          <div id="project-groups">
+            <section class="project-group" id="game-project-group" aria-labelledby="games-projects-heading">
+              <div class="project-group-heading">
+                <h2 id="games-projects-heading">Games</h2>
+                <span aria-hidden="true"></span>
+              </div>
+              <div class="project-grid project-grid--games" id="game-project-grid" aria-live="polite"></div>
+            </section>
+            <section class="project-group" id="studio-project-group" aria-labelledby="studios-projects-heading">
+              <div class="project-group-heading">
+                <h2 id="studios-projects-heading">Studios &amp; Discords</h2>
+                <span aria-hidden="true"></span>
+              </div>
+              <div class="project-grid project-grid--studios" id="studio-project-grid" aria-live="polite"></div>
+            </section>
+            <section class="project-group" id="other-project-group" aria-labelledby="other-projects-heading">
+              <div class="project-group-heading">
+                <h2 id="other-projects-heading">Other</h2>
+                <span aria-hidden="true"></span>
+              </div>
+              <div class="project-grid project-grid--other" id="other-project-grid" aria-live="polite"></div>
+            </section>
+          </div>
+          <div class="empty-work" id="empty-work" hidden>
+            <span class="empty-mark">✳</span>
+            <p>Good work takes care to show.</p>
+            <span>Project details are being gathered. Check back soon.</span>
+          </div>
+          <template id="project-card-template">
+            <article class="project-card reveal">
+              <div class="game-banner">
+                <img class="banner-image" alt="" loading="lazy" hidden>
+                <video class="asset-video-preview" muted autoplay loop playsinline preload="metadata" hidden></video>
+                <iframe class="asset-video-embed" title="Video preview" allow="autoplay; encrypted-media" loading="lazy" hidden></iframe>
+                <div class="banner-placeholder" aria-hidden="true">
+                  <span class="visual-orbit visual-orbit--one"></span>
+                  <span class="visual-orbit visual-orbit--two"></span>
+                  <span class="visual-symbol">✳</span>
+                </div>
+                <div class="banner-shade"></div>
+                <div class="banner-topline">
+                  <div class="project-tag-list" aria-label="Project tags"></div>
+                  <div class="project-badges">
+                    <span class="project-status project-status--lifecycle" hidden></span>
+                    <span class="project-release-status" hidden></span>
+                  </div>
+                </div>
+                <div class="project-banner-identity" hidden>
+                  <img class="project-pfp" alt="" loading="lazy" hidden>
+                  <span class="project-monogram" aria-hidden="true" hidden></span>
+                </div>
+                <button class="video-trigger" type="button" hidden aria-label="Play project video">▶ <span>Watch</span></button>
+              </div>
+              <div class="game-card-details">
+                <h3 class="project-title"></h3>
+                <span class="project-role" hidden></span>
+                <p class="project-attribution" hidden></p>
+                <div class="game-metrics"></div>
+                <div class="game-card-links">
+                  <a class="project-link" hidden target="_blank" rel="noopener noreferrer"><span class="project-link-label">View project</span><span aria-hidden="true">↗</span></a>
+                  <a class="discord-server-link" hidden target="_blank" rel="noopener noreferrer"><span>Discord server</span><span aria-hidden="true">↗</span></a>
+                </div>
+              </div>
+            </article>
+          </template>
+          <div class="video-modal" id="video-modal" hidden role="dialog" aria-modal="true" aria-label="Project video">
+            <button class="video-close" type="button" aria-label="Close video">×</button>
+            <div class="video-frame" id="video-frame"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-inner">
+        <a class="wordmark footer-wordmark" href="index.html#home">Ly<span>Me</span><i>.</i></a>
+        <a href="#main" class="back-to-top">Back to top ↑</a>
+        <span class="copyright">© <span id="current-year"></span> LyMe</span>
+      </div>
+    </footer>
+  </body>
+</html>

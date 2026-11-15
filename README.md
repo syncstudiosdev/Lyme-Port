@@ -1,4 +1,4 @@
-# LyMe — Portfolio
+# LyMe - Portfolio
 
 A responsive, dependency-free portfolio site built with plain HTML, CSS, and JavaScript. It is designed to be hosted as a static site; no build step or private API credentials are required.
 
@@ -6,42 +6,53 @@ A responsive, dependency-free portfolio site built with plain HTML, CSS, and Jav
 
 Open `index.html` in a browser, or serve this folder with any static file server. Local media works when served over localhost; publish all project media files alongside the site.
 
+Page loads and navigation between pages use a short transition featuring the profile picture; it is disabled when reduced motion is enabled in the visitor's system settings.
+
+The home page is arranged as **Home**, **About me**, **What I do**, **Work**, and **Contact**. To change the home hero image, replace the `--hero-banner-image` URL near the top of `styles.css`; the dark overlay keeps the text readable.
+
+The warm gold accents (`#f4c462` and `#fdedb0`) and dark background are controlled by the color variables near the top of `styles.css`.
+
 ## Add work cards
 
 Open `portfolio.js` and find `portfolioConfig.projects`. Copy a project object in the array, paste it as a new entry, and replace its values. Separate project objects with commas, save, then refresh.
 
-Development and Management use matching game cards with a wide banner and optional profile picture. Assets are video showcases: the video plays muted in a larger banner preview, with the project title and a larger Watch button over it. Asset cards do not use banner images or profile pictures.
+Projects are grouped into **Games**, **Studios & Discords**, and **Other**. Cards show their **Management**, **Producer**, or **Ownership** category. The home page shows the featured projects, while `work.html` lists every project. Video showcases can play muted in a larger banner preview, with a Watch button over it.
 
-- `category` — `"development"` for games you contributed to as a developer, `"management"` for games you helped manage, `"own"` for games or studios you own, or `"development-assets"` for videos showcasing assets or development work. These appear as **Development**, **Management**, **Own**, and **Assets** on the page.
-- Projects are randomized on each page load; category filters keep that randomized order.
-- `title` — game, group, or studio name.
-- `role` — your role on the project, such as `"Manager"` or `"Scripter"`.
-- `status` — optional lifecycle status: `"active"` or `"retired"`. This is shown in its own badge.
-- `releaseStatus` — optional release stage: `"in-dev"`, `"released"`, or `"unreleased"`. This is shown beside the lifecycle status. `"in-development"` is accepted as an alias for `"in-dev"`.
-- `banner` — optional wide game-card image. If omitted, `image` is used as a backwards-compatible banner; if neither exists, the abstract artwork fallback is shown. Assets cards use their video as the banner instead.
-- `pfp` — optional square game or studio icon displayed over the banner. If omitted or unavailable on game cards, the card shows initials. Assets cards do not display a profile picture.
-- `technology` — optional category label, for example `"Roblox · Luau"`. If omitted, the card displays its Development, Management, or Own category.
-- `peakCcu`, `discordMembers`, `currentCcu`, `totalVisits` — optional values. Use accurate numbers (the card formats numeric values compactly, e.g. `12500` as `12.5K`), or leave empty to hide a metric. These values are entered manually and are not fetched live.
-- `link` — optional public game or project link.
-- `discordLink` — optional Discord invite link.
-- `video` — optional YouTube URL, direct video URL, or local video path; adds a video button to the banner.
-- `image` — optional existing project image, used as a banner when `banner` is not set.
+- `displayGroup` - `"game"` for a game card, `"studio"` for a Studios & Discords card, or `"other"` for a website or community that doesn't fit those groups. Other cards omit game metrics.
+- `category` - `"management"` for projects you helped manage, `"producer"` for projects you produce, or `"ownership"` for games or studios you own. The matching category appears on each card.
+- `featured` - set to `true` to show the project on the home page.
+- `featuredOrder` - optional number to set the order of featured projects on the home page.
+- Projects on `work.html` are randomized on each page load; featured projects keep their configured order.
+- `title` - game, group, or studio name.
+- `role` - your role on the project, such as `"Manager"` or `"Scripter"`.
+- `status` - optional lifecycle status: `"active"` or `"retired"`. This is shown in its own badge.
+- `releaseStatus` - optional release stage: `"in-dev"` or `"released"`. This is shown beside the lifecycle status. `"in-development"` is accepted as an alias for `"in-dev"`.
+- `banner` - optional wide game-card image. If omitted, `image` is used as a backwards-compatible banner; if neither exists, the abstract artwork fallback is shown.
+- `pfp` - optional square studio icon displayed over the banner. If omitted or unavailable, the card shows initials.
+- `peakCcu`, `totalVisits` - optional values. Use accurate numbers (the card formats numeric values compactly, e.g. `12500` as `12.5K`); empty values display **In Dev**. These values are entered manually and are not fetched live.
+- `link` - optional public game or project link. Roblox game links are labeled **Play on Roblox**, studio websites **Visit website**, and YouTube links **View channel**.
+- `discordLink` - optional Discord invite link.
+- `video` - optional YouTube URL, direct video URL, or local video path; adds a video button to the banner.
+- `videoShowcase` - set to `true` to use the video as the banner preview and show the larger showcase layout.
+- `image` - optional existing project image, used as a banner when `banner` is not set.
 
-For example, add an asset entry like this and replace the paths and URL with your own:
+For example, add a video showcase like this and replace the paths and URL with your own:
 
 ```js
 {
-  category: "development-assets",
+  displayGroup: "game",
+  category: "producer",
   title: "Custom UI System",
   role: "Creator",
   banner: "assets/ui-system-banner.png",
-  video: "https://youtu.be/your-video-id"
+  video: "https://youtu.be/your-video-id",
+  videoShowcase: true
 }
 ```
 
-Add a `video` URL or local video path to each asset entry to show its Watch button. The same video field works for other categories if needed.
+Add a `video` URL or local video path to show a Watch button. The same video field works for other categories if needed.
 
-The Everything filter shows two projects initially. Visitors can use **Show all projects** to expand the list or **Show fewer projects** to collapse it again. Each category filter, including Assets, shows all projects in that category. Project order is randomized on each page load. The included `vfx1.mp4` is configured as an Assets demo.
+The home page features Anime Imperial, Oathbound, and Wizardry, followed by Overtake Studios and FLux. The **View all work** link opens `work.html` with all game and studio cards.
 
 Put local images in an `images` folder beside `portfolio.js`, or use an image path that matches where the file is stored. Only include statuses and metrics you can verify. The existing Oathbound entry keeps its name, Manager role, supplied image, and configured status; unknown player counts are not filled in.
 
@@ -56,13 +67,11 @@ In `portfolio.js`, `portfolioConfig.collaborations` is prefilled with Tidebound 
 
 `name` is required; `logo` and `link` are optional. Put logo files beside `portfolio.js` or use the correct relative path, and separate entries with commas. Only list current collaborations you have permission to share.
 
-## Discord profile and links
+## Profile images and links
 
-Set `discordUserId` in `portfolio.js` to the numeric Discord user ID to link the navigation profile and contact button to that Discord profile. The Netlify function fetches the current display name, avatar, banner, and avatar decoration on page load, then refreshes every five minutes while the page is visible.
+Set `profileAvatarImage` and `profileBannerImage` in `portfolio.js` to local image paths. The avatar is used in both the navigation bar and contact profile. Leave the banner path empty to use the built-in background, or set it to your own image.
 
-On Netlify, add `DISCORD_API_TOKEN` under **Site configuration → Environment variables**, allow it for Functions, and redeploy. The token is read server-side by `netlify/functions/discord-profile.js` and is never sent to the browser. The function's `DISCORD_USER_ID` constant must match `discordUserId` in `portfolio.js` if you change the profile ID.
-
-Custom status is not included in the Discord user API response. Showing it live requires a separate, continuously running Discord Gateway bot with the Presence intent enabled and a shared server with the account; this Netlify function does not provide status updates.
+Set `discordUserId` in `portfolio.js` to link the navigation profile and contact button to your Discord profile. The site uses the ID only to build the link and does not fetch profile data from Discord.
 
 ## Customize
 

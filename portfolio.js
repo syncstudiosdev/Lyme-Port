@@ -1,52 +1,47 @@
 const portfolioConfig = {
   // Used to link directly to the Discord profile.
   discordUserId: "1270007167541575854",
-  profileAvatarImage: "",
-  profileBannerImage: "",
+  profileAvatarImage: "pfp.jpg",
+  profileBannerImage: "banner.png",
   collaborations: [
     // Copy this entry for each additional studio; logo and link are optional.
     { name: "SDS", logo: "SDS.png", link: "https://sushideluxe.gg/" },
     { name: "ACT2", logo: "act2.png", link: "https://www.act2studios.co/" },
     { name: "Overtake", logo: "Overtake.png", link: "https://ovtk.cc/" },
+    { name: "Fame", logo: "Fame.png", link: "" },
   ],
   projects: [
-    // DEVELOPMENT TEMPLATE: copy this object, then replace the example values.
+    // PROJECT TEMPLATE: copy this object, then replace the example values.
     
     {
-      category: "own",
+      category: "ownership",
+      displayGroup: "studio",
+      featured: true,
+      featuredOrder: 5,
       title: "FLux",
-      role: "Chief Executive Officer + Founder",
+      role: "Founder",
       status: "Active", // optional lifecycle status: "active" or "retired"
-      releaseStatus: "", // optional release stage: "in-dev", "released", or "unreleased"
+      releaseStatus: "", // optional release stage: "in-dev" or "released"
       banner: "fluxbanner.png",
       pfp: "FLUX.png",
       technology: "",
-      tags: ["Game Production", "Creative Direction", "Development"],
-      description: "Building a creative studio identity around player-first experiences, polished execution, and long-term vision.",
-      attribution: "Founder-led studio",
       peakCcu: "",
-      discordMembers: "300+",
-      currentCcu: "",
       totalVisits: "",
       link: "",
       discordLink: "https://discord.gg/MWZu7gMrg7",
     },
 
         {
-      category: "own",
+      category: "ownership",
+          displayGroup: "game",
       title: "Slime : Origin",
       role: "Owner",
       status: "Active", // optional lifecycle status: "active" or "retired"
-      releaseStatus: "In Dev", // optional release stage: "in-dev", "released", or "unreleased"
+      releaseStatus: "In Dev", // optional release stage: "in-dev" or "released"
       banner: "slime.png",
       pfp: "slime.png",
       technology: "",
-      tags: ["Project Management", "Creative Direction", "Community Management"],
-      description: "A self-directed project focused on building community, gameplay direction, and a coherent player experience from the ground up.",
-      attribution: "Independent project",
       peakCcu: "",
-      discordMembers: "200+",
-      currentCcu: "",
       totalVisits: "",
       link: "",
       discordLink: "https://discord.gg/KYDerHx588",
@@ -55,6 +50,9 @@ const portfolioConfig = {
     
     {
       category: "management",
+      displayGroup: "game",
+      featured: true,
+      featuredOrder: 2,
       title: "Oathbound",
       role: "Manager",
       status: "Active",
@@ -62,8 +60,6 @@ const portfolioConfig = {
       banner: "oathboundbanner.png",
       pfp: "oathboundpfp.png",
       peakCcu: "",
-      discordMembers: "150+",
-      currentCcu: "",
       totalVisits: "",
       link: "",
       discordLink: "https://discord.gg/u4BpEerU6H"
@@ -71,6 +67,9 @@ const portfolioConfig = {
 
     {
       category: "management",
+      displayGroup: "game",
+      featured: true,
+      featuredOrder: 3,
       title: "Wizardry",
       role: "Community Manager",
       status: "Active",
@@ -78,8 +77,6 @@ const portfolioConfig = {
       banner: "Wizardrybanner.jpg",
       pfp: "Wizardry.webp",
       peakCcu: "",
-      discordMembers: "200+",
-      currentCcu: "",
       totalVisits: "",
       link: "",
       discordLink: "https://discord.gg/qnJD8cjkE5"
@@ -87,6 +84,7 @@ const portfolioConfig = {
 
         {
       category: "management",
+      displayGroup: "game",
       title: "+1 Cut Grass Adventure",
       role: "Content Creator Collector",
       status: "Active",
@@ -94,8 +92,6 @@ const portfolioConfig = {
       banner: "+1cut.png",
       pfp: "+1cut.png",
       peakCcu: "13k+",
-      discordMembers: "3k+",
-      currentCcu: "4k+",
       totalVisits: "75m+",
       link: "https://www.roblox.com/games/90086669327265/1-Cut-Grass-Adventure",
       discordLink: "https://discord.gg/nN9aPzXcau"
@@ -103,15 +99,14 @@ const portfolioConfig = {
 
     {
       category: "management",
+      displayGroup: "game",
       title: "Veridian Sea",
       role: "Content Creator Manager",
       status: "Active",
       releaseStatus: "In Dev",
       banner: "vsbanner.png",
-      pfp: "vspfp.png",
+      pfp: "veridiansea.jpg",
       peakCcu: "",
-      discordMembers: "500+",
-      currentCcu: "",
       totalVisits: "",
       link: "",
       discordLink: "https://discord.gg/nFXRUDYcKf"
@@ -119,43 +114,46 @@ const portfolioConfig = {
 
     {
       category: "management",
+      displayGroup: "other",
       title: "Masked.bio",
       role: "Platform Coordinator",
       status: "Active",
       releaseStatus: "In Dev",
       banner: "maskedbiobanner.gif",
       pfp: "maskedbio.webp",
-      discordMembers: "150+",
       link: "https://masked.bio/",
       discordLink: "https://discord.gg/A2hSqQhj28"
     },
 
     {
       category: "management",
+      displayGroup: "other",
       title: "EX Gang",
       role: "Server Manager",
       status: "Active",
       banner: "exgangbanner.png",
       pfp: "exgangpfp.png",
-      discordMembers: "40k+",
       link: "https://www.youtube.com/channel/UCLLnijhbtcfSDWgI_IQx5tw",
       discordLink: "https://discord.gg/k29qYq662w"
     },
 
     {
       category: "management",
+      displayGroup: "other",
       title: "Ikari No Shisha",
       role: "Operator",
       status: "Active",
       banner: "ikaribanner.png",
       pfp: "ikari.gif",
-      discordMembers: "25k+",
       link: "https://aotrcarry.com/",
       discordLink: "https://discord.gg/JM8d2ghhWs"
     },
 
     {
       category: "management",
+      displayGroup: "game",
+      featured: true,
+      featuredOrder: 1,
       title: "Anime Imperial",
       role: "Assistant Manager",
       status: "Active",
@@ -163,20 +161,25 @@ const portfolioConfig = {
       banner: "aimpbanner.png",
       pfp: "aimppfp.png",
       peakCcu: "",
-      discordMembers: "2.7k+",
-      currentCcu: "",
       totalVisits: "",
       link: "",
       discordLink: "https://discord.gg/fuqUrvSFfA"
     },
 
     {
-      category: "development-assets",
-      title: "Basic VFX Pack",
-      tags: ["VFX", "Development", "Creative Direction"],
-      description: "A concise showcase of visual effects work and stylised motion design suited to Roblox and game-focused creative pipelines.",
-      banner: "ryftbanner.png",
-      video: "vfx1.mp4"
+      category: "producer",
+      displayGroup: "studio",
+      featured: true,
+      featuredOrder: 4,
+      title: "Overtake Studios",
+      role: "Game Producer",
+      status: "Active",
+      banner: "overtakebanner.png",
+      pfp: "overtakepfp.png",
+      peakCcu: "10k+",
+      totalVisits: "8M+",
+      link: "https://ovtk.cc/",
+      discordLink: "https://discord.gg/ZD2uQmeHcW"
     },
 
   ],
@@ -191,14 +194,12 @@ const projectReleaseLabels = {
   "in-dev": "In Dev",
   "in-development": "In Dev",
   released: "Released",
-  unreleased: "Unreleased",
 };
 
 const projectCategories = {
-  development: "Development",
   management: "Management",
-  "development-assets": "Assets",
-  own: "Own",
+  producer: "Producer",
+  ownership: "Ownership",
 };
 
 const randomizedProjects = [...portfolioConfig.projects];
@@ -207,10 +208,15 @@ for (let index = randomizedProjects.length - 1; index > 0; index -= 1) {
   [randomizedProjects[index], randomizedProjects[swapIndex]] = [randomizedProjects[swapIndex], randomizedProjects[index]];
 }
 
-const projectGrid = document.querySelector("#project-grid");
+const gameProjectGroup = document.querySelector("#game-project-group");
+const studioProjectGroup = document.querySelector("#studio-project-group");
+const otherProjectGroup = document.querySelector("#other-project-group");
+const gameProjectGrid = document.querySelector("#game-project-grid");
+const studioProjectGrid = document.querySelector("#studio-project-grid");
+const otherProjectGrid = document.querySelector("#other-project-grid");
+const projectGroups = document.querySelector("#project-groups");
 const emptyWork = document.querySelector("#empty-work");
-const projectListToggle = document.querySelector("#project-list-toggle");
-const categoryButtons = [...document.querySelectorAll(".filter-button")];
+const isWorkPage = document.body.dataset.page === "work";
 const navLink = document.querySelector("#nav-discord-link");
 const contactLink = document.querySelector("#contact-discord-link");
 const videoModal = document.querySelector("#video-modal");
@@ -263,6 +269,11 @@ function renderCollaborations() {
       link.setAttribute("aria-label", `${collaborator.name} (external link)`);
       safeExternalLink(link, collaborator.link);
       if (link.hasAttribute("href")) {
+        const arrow = document.createElement("span");
+        arrow.className = "collaborator-arrow";
+        arrow.setAttribute("aria-hidden", "true");
+        arrow.textContent = "↗";
+        item.append(arrow);
         link.append(item);
         list.append(link);
         continue;
@@ -272,33 +283,32 @@ function renderCollaborations() {
   }
 }
 
-function setCount(id, count) {
-  document.querySelector(id).textContent = String(count).padStart(2, "0");
-}
-
-function updatePortfolio(filter = "all", showAll = false) {
-  projectGrid.replaceChildren();
+function updatePortfolio() {
+  gameProjectGrid.replaceChildren();
+  studioProjectGrid.replaceChildren();
+  otherProjectGrid.replaceChildren();
   const validProjects = randomizedProjects.filter((project) =>
     Object.prototype.hasOwnProperty.call(projectCategories, project.category));
-  const projects = validProjects
-    .filter((project) => filter === "all" || project.category === filter);
-  const visibleProjects = filter === "all" && !showAll ? projects.slice(0, 2) : projects;
+  const projects = isWorkPage
+    ? validProjects
+    : portfolioConfig.projects
+      .filter((project) => project.featured
+        && Object.prototype.hasOwnProperty.call(projectCategories, project.category))
+      .sort((first, second) => first.featuredOrder - second.featuredOrder);
 
-  for (const project of visibleProjects) {
+  for (const project of projects) {
     const card = document.querySelector("#project-card-template").content.firstElementChild.cloneNode(true);
-    card.classList.add(`project-card--${project.category}`);
-    const isAsset = project.category === "development-assets";
+    card.classList.add(`project-card--${project.category}`, `project-card--${project.displayGroup}`);
+    const isStudio = project.displayGroup === "studio";
+    const isOther = project.displayGroup === "other";
+    const hasProfileIdentity = isStudio || isOther;
+    const isVideoShowcase = project.videoShowcase === true;
+    if (isVideoShowcase) card.classList.add("project-card--video-showcase");
     card.querySelector(".project-title").textContent = project.title || "Untitled project";
 
     const tagList = card.querySelector(".project-tag-list");
-    const tags = [];
-    const rawTags = Array.isArray(project.tags) ? project.tags : [];
-    for (const tag of rawTags) {
-      const label = String(tag || "").trim();
-      if (label && !tags.includes(label)) tags.push(label);
-    }
-    const categoryTag = project.technology || projectCategories[project.category];
-    if (categoryTag && !tags.includes(categoryTag)) tags.unshift(categoryTag);
+    const categoryTag = projectCategories[project.category];
+    const tags = categoryTag ? [categoryTag] : [];
     if (tags.length === 0) {
       tagList.hidden = true;
     } else {
@@ -329,7 +339,7 @@ function updatePortfolio(filter = "all", showAll = false) {
 
     const banner = card.querySelector(".banner-image");
     const bannerUrl = project.banner || project.image;
-    if (bannerUrl && !isAsset) {
+    if (bannerUrl && !isVideoShowcase) {
       banner.src = bannerUrl;
       banner.alt = `${project.title || "Project"} banner`;
       banner.hidden = false;
@@ -341,7 +351,11 @@ function updatePortfolio(filter = "all", showAll = false) {
     }
 
     const pfp = card.querySelector(".project-pfp");
-    if (project.pfp && !isAsset) {
+    const projectIdentity = card.querySelector(".project-banner-identity");
+    if (hasProfileIdentity && !isVideoShowcase) {
+      projectIdentity.hidden = false;
+    }
+    if (project.pfp && hasProfileIdentity && !isVideoShowcase) {
       pfp.src = project.pfp;
       pfp.alt = `${project.title || "Project"} profile picture`;
       pfp.hidden = false;
@@ -352,8 +366,9 @@ function updatePortfolio(filter = "all", showAll = false) {
       }, { once: true });
     }
     card.querySelector(".project-monogram").textContent = (project.title || "Ly").slice(0, 2).toUpperCase();
-    if (isAsset) {
+    if (isVideoShowcase) {
       pfp.hidden = true;
+      projectIdentity.hidden = true;
       card.querySelector(".project-monogram").hidden = true;
       if (project.video) {
         const previewUrl = new URL(project.video, window.location.href);
@@ -384,12 +399,6 @@ function updatePortfolio(filter = "all", showAll = false) {
       role.hidden = false;
     }
 
-    const description = card.querySelector(".project-description");
-    if (project.description) {
-      description.textContent = project.description;
-      description.hidden = false;
-    }
-
     const attribution = card.querySelector(".project-attribution");
     if (project.attribution) {
       attribution.textContent = project.attribution;
@@ -398,27 +407,42 @@ function updatePortfolio(filter = "all", showAll = false) {
 
     const metricDefinitions = [
       ["peakCcu", "Peak CCU"],
-      ["discordMembers", "Discord members"],
-      ["currentCcu", "Current CCU"],
       ["totalVisits", "Total visits"],
     ];
     const metrics = card.querySelector(".game-metrics");
-    for (const [key, label] of metricDefinitions) {
-      if (project[key] === undefined || project[key] === null || project[key] === "") continue;
-      const metric = document.createElement("div");
-      metric.className = "game-metric";
-      const value = document.createElement("strong");
-      const caption = document.createElement("span");
-      const numericValue = Number(project[key]);
-      value.textContent = Number.isFinite(numericValue)
-        ? new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(numericValue)
-        : String(project[key]);
-      caption.textContent = label;
-      metric.append(value, caption);
-      metrics.append(metric);
+    if (!isOther) {
+      for (const [key, label] of metricDefinitions) {
+        const metric = document.createElement("div");
+        metric.className = "game-metric";
+        const value = document.createElement("strong");
+        const caption = document.createElement("span");
+        const metricValue = project[key];
+        if (metricValue === undefined || metricValue === null || metricValue === "") {
+          value.textContent = "In Dev";
+        } else {
+          const numericValue = Number(metricValue);
+          value.textContent = Number.isFinite(numericValue)
+            ? new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(numericValue)
+            : String(metricValue);
+        }
+        caption.textContent = label;
+        metric.append(value, caption);
+        metrics.append(metric);
+      }
     }
 
-    safeExternalLink(card.querySelector(".project-link"), project.link);
+    const projectLink = card.querySelector(".project-link");
+    safeExternalLink(projectLink, project.link);
+    if (!projectLink.hidden) {
+      const linkLabel = projectLink.querySelector(".project-link-label");
+      const isRobloxLink = /^https?:\/\/(?:www\.)?roblox\.com\//i.test(project.link);
+      const isYoutubeLink = /^https?:\/\/(?:www\.)?youtube\.com\//i.test(project.link);
+      const isWebsiteGroup = isStudio || isOther;
+      linkLabel.textContent = project.displayGroup === "game" && isRobloxLink
+        ? "Play on Roblox"
+        : isWebsiteGroup && isYoutubeLink ? "View channel"
+          : isWebsiteGroup ? "Visit website" : "View project";
+    }
     safeExternalLink(card.querySelector(".discord-server-link"), project.discordLink);
     const cardDetails = card.querySelector(".game-card-details");
     cardDetails.hidden = metrics.children.length === 0
@@ -429,18 +453,15 @@ function updatePortfolio(filter = "all", showAll = false) {
       trigger.hidden = false;
       trigger.addEventListener("click", () => openVideo(project.video));
     }
+    const projectGrid = isStudio ? studioProjectGrid : isOther ? otherProjectGrid : gameProjectGrid;
     projectGrid.append(card);
   }
 
+  gameProjectGroup.hidden = !projects.some((project) => project.displayGroup === "game");
+  studioProjectGroup.hidden = !projects.some((project) => project.displayGroup === "studio");
+  otherProjectGroup.hidden = !projects.some((project) => project.displayGroup === "other");
   emptyWork.hidden = projects.length > 0;
-  projectListToggle.hidden = filter !== "all" || projects.length <= 2;
-  projectListToggle.textContent = showAll ? "Show fewer projects" : "Show all projects";
-  projectListToggle.setAttribute("aria-expanded", String(showAll));
-  setCount("#count-all", validProjects.length);
-  for (const category of Object.keys(projectCategories)) {
-    setCount(`#count-${category}`, validProjects.filter((project) => project.category === category).length);
-  }
-  observeReveals(projectGrid);
+  observeReveals(projectGroups);
 }
 
 function openVideo(url) {
@@ -500,116 +521,112 @@ function setAvatar(image, fallback, url, name) {
   }, { once: true });
 }
 
-function buildDiscordImageUrl(type, userId, assetHash, size = 256) {
-  if (!userId || !assetHash) return "";
-  const extension = assetHash.startsWith("a_") ? "gif" : "png";
-  return `https://cdn.discordapp.com/${type}/${encodeURIComponent(userId)}/${encodeURIComponent(assetHash)}.${extension}?size=${size}`;
-}
-
-function applyDiscordProfileData(profile) {
-  if (!profile || !profile.id) return;
-
-  const username = profile.global_name || profile.username || "LyMe";
-  const avatarUrl = buildDiscordImageUrl("avatars", profile.id, profile.avatar, 256);
-  const bannerUrl = profile.banner ? buildDiscordImageUrl("banners", profile.id, profile.banner, 1024) : "";
-  const decorationAsset = profile.avatar_decoration_data?.asset;
-
-  document.querySelectorAll("#nav-discord-name, #contact-discord-name").forEach((element) => {
-    element.textContent = username;
-  });
-
-  setAvatar(document.querySelector("#nav-avatar"), document.querySelector("#nav-avatar-fallback"), avatarUrl, username);
-  setAvatar(document.querySelector("#contact-avatar"), document.querySelector("#contact-avatar-fallback"), avatarUrl, username);
-
-  const profileBanner = document.querySelector(".profile-banner");
-  const profileBannerImage = document.querySelector("#profile-banner-image");
-  if (bannerUrl) {
-    profileBannerImage.src = bannerUrl;
-    profileBannerImage.hidden = false;
-    profileBanner.classList.add("has-discord-banner");
-    profileBannerImage.addEventListener("error", () => {
-      profileBannerImage.hidden = true;
-      profileBanner.classList.remove("has-discord-banner");
-    }, { once: true });
-  } else {
-    profileBannerImage.hidden = true;
-    profileBanner.classList.remove("has-discord-banner");
-  }
-
-  const decorationImage = document.querySelector("#discord-decoration");
-  if (decorationAsset) {
-    decorationImage.src = `https://cdn.discordapp.com/avatar-decoration-presets/${encodeURIComponent(decorationAsset)}.png?size=256`;
-    decorationImage.alt = "";
-    decorationImage.hidden = false;
-    decorationImage.addEventListener("error", () => {
-      decorationImage.hidden = true;
-    }, { once: true });
-  } else {
-    decorationImage.hidden = true;
-  }
-
-  document.querySelector("#contact-discord-note").textContent = "Profile synced with your Discord account.";
-}
-
-async function fetchDiscordProfileData() {
-  const userId = portfolioConfig.discordUserId.trim();
-  if (!/^\d{17,20}$/.test(userId)) return;
-
-  try {
-    const response = await fetch("/.netlify/functions/discord-profile", {
-      headers: { Accept: "application/json" },
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      throw new Error(`Discord profile service failed (${response.status})`);
-    }
-
-    const profile = await response.json();
-    if (!profile || !profile.id) {
-      throw new Error("No Discord profile data returned.");
-    }
-
-    applyDiscordProfileData(profile);
-  } catch (error) {
-    console.warn("Unable to fetch Discord profile data via API:", error);
-    document.querySelector("#contact-discord-note").textContent =
-      "Discord profile sync is unavailable. Check the Netlify function setup.";
-  }
-}
-
-async function configureDiscordProfile() {
+function configureDiscordLinks() {
   const userId = portfolioConfig.discordUserId.trim();
   if (!/^\d{17,20}$/.test(userId)) return;
 
   const profileUrl = `https://discord.com/users/${encodeURIComponent(userId)}`;
-  for (const link of [navLink, contactLink]) safeExternalLink(link, profileUrl);
-  document.querySelector("#contact-discord-label").textContent = "Open Discord profile";
-
-  await fetchDiscordProfileData();
-
-  if (!document.querySelector("#contact-discord-note").textContent.includes("synced")) {
-    document.querySelector("#contact-discord-note").textContent = "Send a message through my Discord profile.";
+  for (const link of [navLink, contactLink]) {
+    if (link) safeExternalLink(link, profileUrl);
   }
+  const label = document.querySelector("#contact-discord-label");
+  if (label) label.textContent = "Open Discord profile";
+  const note = document.querySelector("#contact-discord-note");
+  if (note) note.textContent = "Send a message through my Discord profile.";
 }
 
 function loadProfileAvatar() {
   const avatarUrl = portfolioConfig.profileAvatarImage;
-  const displayName = document.querySelector("#nav-discord-name").textContent;
-  setAvatar(document.querySelector("#nav-avatar"), document.querySelector("#nav-avatar-fallback"), avatarUrl, displayName);
-  setAvatar(document.querySelector("#contact-avatar"), document.querySelector("#contact-avatar-fallback"), avatarUrl, displayName);
+  const navName = document.querySelector("#nav-discord-name");
+  if (!navName) return;
+  const displayName = navName.textContent;
+  const navAvatar = document.querySelector("#nav-avatar");
+  const navFallback = document.querySelector("#nav-avatar-fallback");
+  if (navAvatar && navFallback) setAvatar(navAvatar, navFallback, avatarUrl, displayName);
+  const contactAvatar = document.querySelector("#contact-avatar");
+  const contactFallback = document.querySelector("#contact-avatar-fallback");
+  if (contactAvatar && contactFallback) setAvatar(contactAvatar, contactFallback, avatarUrl, displayName);
 }
 
 function loadProfileBanner() {
   if (!portfolioConfig.profileBannerImage) return;
 
   const image = document.querySelector("#profile-banner-image");
+  if (!image) return;
+  const banner = image.closest(".profile-banner");
   image.src = portfolioConfig.profileBannerImage;
   image.hidden = false;
+  banner.classList.add("has-custom-banner");
   image.addEventListener("error", () => {
     console.error(`Unable to load profile banner image: ${portfolioConfig.profileBannerImage}`);
     image.hidden = true;
+    banner.classList.remove("has-custom-banner");
   }, { once: true });
+}
+
+function enableProfileTilt() {
+  const profile = document.querySelector(".contact-profile");
+  const hasFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (!profile || !hasFinePointer.matches || prefersReducedMotion.matches) return;
+
+  let resetTimeout;
+  const resetTilt = () => {
+    if (resetTimeout !== undefined) window.clearTimeout(resetTimeout);
+    profile.style.setProperty("--profile-tilt-x", "0deg");
+    profile.style.setProperty("--profile-tilt-y", "0deg");
+    resetTimeout = window.setTimeout(() => {
+      profile.classList.remove("is-tilting");
+      resetTimeout = undefined;
+    }, 180);
+  };
+
+  profile.addEventListener("pointermove", (event) => {
+    if (event.pointerType === "touch") return;
+    if (resetTimeout !== undefined) {
+      window.clearTimeout(resetTimeout);
+      resetTimeout = undefined;
+    }
+
+    const bounds = profile.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) return;
+    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+    profile.classList.add("is-tilting");
+    profile.style.setProperty("--profile-tilt-x", `${(-y * 12).toFixed(2)}deg`);
+    profile.style.setProperty("--profile-tilt-y", `${(x * 14).toFixed(2)}deg`);
+  });
+  profile.addEventListener("pointerleave", resetTilt);
+  profile.addEventListener("pointercancel", resetTilt);
+}
+
+function enablePageTransitions() {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let isNavigating = false;
+
+  document.addEventListener("click", (event) => {
+    if (prefersReducedMotion.matches || event.defaultPrevented || event.button !== 0
+      || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+    const link = event.target instanceof Element ? event.target.closest("a") : null;
+    if (!link || link.hasAttribute("download") || (link.target && link.target !== "_self")) return;
+
+    const destination = new URL(link.href, window.location.href);
+    if (destination.origin !== window.location.origin || destination.pathname === window.location.pathname) return;
+
+    event.preventDefault();
+    if (isNavigating) return;
+    isNavigating = true;
+    document.body.classList.add("page-leaving");
+    window.setTimeout(() => window.location.assign(destination.href), 520);
+  });
+
+  window.addEventListener("pageshow", (event) => {
+    if (!event.persisted) return;
+    document.body.classList.remove("page-leaving");
+    document.body.classList.add("page-returning");
+    window.setTimeout(() => document.body.classList.remove("page-returning"), 800);
+  });
 }
 
 function observeReveals(root = document) {
@@ -628,21 +645,39 @@ function observeReveals(root = document) {
   items.forEach((item) => observer.observe(item));
 }
 
-categoryButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    categoryButtons.forEach((item) => {
-      const selected = item === button;
-      item.classList.toggle("is-active", selected);
-      item.setAttribute("aria-pressed", String(selected));
-    });
-    updatePortfolio(button.dataset.filter);
-  });
-});
+function trackActiveNavigation() {
+  const sections = [...document.querySelectorAll("main > section[id]")];
+  const navLinks = [...document.querySelectorAll("#nav-links a")];
+  if (!sections.length || !navLinks.length) return;
 
-projectListToggle.addEventListener("click", () => {
-  const showAll = projectListToggle.getAttribute("aria-expanded") !== "true";
-  updatePortfolio("all", showAll);
-});
+  const updateSection = () => {
+    const marker = window.innerHeight * 0.5;
+    let activeSection = sections[0];
+    for (const section of sections) {
+      if (section.getBoundingClientRect().top > marker) break;
+      activeSection = section;
+    }
+    if (document.body.dataset.section !== activeSection.id) {
+      document.body.dataset.section = activeSection.id;
+    }
+
+    for (const link of navLinks) {
+      const target = new URL(link.href, window.location.href);
+      const targetSection = target.hash.slice(1) || (target.pathname === window.location.pathname ? "work" : "");
+      if (target.pathname === window.location.pathname && targetSection === activeSection.id) {
+        const current = target.hash ? "location" : "page";
+        if (link.getAttribute("aria-current") !== current) link.setAttribute("aria-current", current);
+      } else if (link.hasAttribute("aria-current")) {
+        link.removeAttribute("aria-current");
+      }
+    }
+  };
+
+  window.addEventListener("scroll", updateSection, { passive: true });
+  window.addEventListener("resize", updateSection);
+  window.addEventListener("hashchange", updateSection);
+  updateSection();
+}
 
 document.querySelector(".menu-toggle").addEventListener("click", (event) => {
   const button = event.currentTarget;
@@ -668,14 +703,12 @@ document.addEventListener("keydown", (event) => {
 });
 
 document.querySelector("#current-year").textContent = new Date().getFullYear();
-renderCollaborations();
+if (document.querySelector("#collaborator-list")) renderCollaborations();
 updatePortfolio();
 observeReveals();
+trackActiveNavigation();
+enableProfileTilt();
+enablePageTransitions();
 loadProfileAvatar();
 loadProfileBanner();
-configureDiscordProfile();
-setInterval(() => {
-  if (document.visibilityState === "visible") {
-    configureDiscordProfile();
-  }
-}, 5 * 60 * 1000);
+configureDiscordLinks();
