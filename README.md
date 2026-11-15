@@ -19,9 +19,10 @@ Open `portfolio.js` and find `portfolioConfig.projects`. Copy a project object i
 Projects are grouped into **Games**, **Studios & Discords**, and **Other**. Cards show their **Management**, **Producer**, or **Ownership** category. The home page shows the featured projects, while `work.html` lists every project. Video showcases can play muted in a larger banner preview, with a Watch button over it.
 
 - `displayGroup` - `"game"` for a game card, `"studio"` for a Studios & Discords card, or `"other"` for a website or community that doesn't fit those groups. Other cards omit game metrics.
-- `category` - `"management"` for projects you helped manage, `"producer"` for projects you produce, or `"ownership"` for games or studios you own. The matching category appears on each card.
+- `category` - `"management"` for projects you helped manage, `"producer"` for projects you produce, or `"ownership"` for games or studios you own. The matching category appears on each card; studio entries may omit it.
 - `featured` - set to `true` to show the project on the home page.
 - `featuredOrder` - optional number to set the order of featured projects on the home page.
+- `tags` - optional array of extra labels to show on the card, e.g. `["Studio", "Discord"]`.
 - Projects on `work.html` are randomized on each page load; featured projects keep their configured order.
 - `title` - game, group, or studio name.
 - `role` - your role on the project, such as `"Manager"` or `"Scripter"`.
@@ -32,6 +33,7 @@ Projects are grouped into **Games**, **Studios & Discords**, and **Other**. Card
 - `peakCcu`, `totalVisits` - optional values. Use accurate numbers (the card formats numeric values compactly, e.g. `12500` as `12.5K`); empty values display **In Dev**. These values are entered manually and are not fetched live.
 - `link` - optional public game or project link. Roblox game links are labeled **Play on Roblox**, studio websites **Visit website**, and YouTube links **View channel**.
 - `discordLink` - optional Discord invite link.
+- `discordLabel` - optional non-clickable label shown instead of a Discord invite button when `discordLink` is empty.
 - `video` - optional YouTube URL, direct video URL, or local video path; adds a video button to the banner.
 - `videoShowcase` - set to `true` to use the video as the banner preview and show the larger showcase layout.
 - `image` - optional existing project image, used as a banner when `banner` is not set.
@@ -52,20 +54,29 @@ For example, add a video showcase like this and replace the paths and URL with y
 
 Add a `video` URL or local video path to show a Watch button. The same video field works for other categories if needed.
 
-The home page features Anime Imperial, Oathbound, and Wizardry, followed by Overtake Studios and FLux. The **View all work** link opens `work.html` with all game and studio cards.
+The home page shows no more than two featured studio cards; all studio and Discord cards appear on `work.html`. The **View all work** link opens `work.html` with every project.
 
 Put local images in an `images` folder beside `portfolio.js`, or use an image path that matches where the file is stored. Only include statuses and metrics you can verify. The existing Oathbound entry keeps its name, Manager role, supplied image, and configured status; unknown player counts are not filled in.
 
-## Show current collaborations
+## Add a studio or Discord
 
-In `portfolio.js`, `portfolioConfig.collaborations` is prefilled with Tidebound and its `tidebound.png` logo. Copy the Tidebound entry and change its name and logo path to add another studio:
+In `portfolio.js`, add an object to `portfolioConfig.projects` for each studio or Discord. Copy one of the `displayGroup: "studio"` entries (such as SDS or SNC) and set its details:
 
 ```js
-{ name: "Tidebound", logo: "tidebound.png" },
-{ name: "Another studio", logo: "another-studio.png", link: "https://example.com" },
+{
+  displayGroup: "studio",
+  featured: true,
+  featuredOrder: 4,
+  title: "Studio name",
+  banner: "studio-banner.png",
+  pfp: "studio-logo.png",
+  tags: ["Studio", "Discord"],
+  link: "https://example.com",
+  discordLink: "https://discord.gg/example",
+},
 ```
 
-`name` is required; `logo` and `link` are optional. Put logo files beside `portfolio.js` or use the correct relative path, and separate entries with commas. Only list current collaborations you have permission to share.
+`title` is required. `banner` is the wide card image; `pfp` is the square logo. `tags`, `link`, and `discordLink` are optional. Set `featured: true` and a `featuredOrder` to make it eligible for Home; only the first two featured studio cards are shown there. All studio cards remain on the Work page. Put image files beside `portfolio.js` or use the correct relative path, and separate entries with commas.
 
 ## Profile images and links
 

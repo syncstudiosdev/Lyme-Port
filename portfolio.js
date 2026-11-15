@@ -3,13 +3,6 @@ const portfolioConfig = {
   discordUserId: "1270007167541575854",
   profileAvatarImage: "pfp.jpg",
   profileBannerImage: "banner.png",
-  collaborations: [
-    // Copy this entry for each additional studio; logo and link are optional.
-    { name: "SDS", logo: "SDS.png", link: "https://sushideluxe.gg/" },
-    { name: "ACT2", logo: "act2.png", link: "https://www.act2studios.co/" },
-    { name: "Overtake", logo: "Overtake.png", link: "https://ovtk.cc/" },
-    { name: "Fame", logo: "Fame.png", link: "" },
-  ],
   projects: [
     // PROJECT TEMPLATE: copy this object, then replace the example values.
     
@@ -17,7 +10,7 @@ const portfolioConfig = {
       category: "ownership",
       displayGroup: "studio",
       featured: true,
-      featuredOrder: 5,
+      featuredOrder: 7,
       title: "FLux",
       role: "Founder",
       status: "Active", // optional lifecycle status: "active" or "retired"
@@ -142,7 +135,7 @@ const portfolioConfig = {
       displayGroup: "other",
       title: "Ikari No Shisha",
       role: "Operator",
-      status: "Active",
+      status: "Retired",
       banner: "ikaribanner.png",
       pfp: "ikari.gif",
       link: "https://aotrcarry.com/",
@@ -170,7 +163,7 @@ const portfolioConfig = {
       category: "producer",
       displayGroup: "studio",
       featured: true,
-      featuredOrder: 4,
+      featuredOrder: 6,
       title: "Overtake Studios",
       role: "Game Producer",
       status: "Active",
@@ -180,6 +173,60 @@ const portfolioConfig = {
       totalVisits: "8M+",
       link: "https://ovtk.cc/",
       discordLink: "https://discord.gg/ZD2uQmeHcW"
+    },
+
+    {
+      category: "management",
+      displayGroup: "studio",
+      featured: true,
+      featuredOrder: 4,
+      title: "SDS",
+      role: "Server Management",
+      status: "Active",
+      banner: "SDS.png",
+      pfp: "SDS.png",
+      link: "https://sushideluxe.gg/",
+      discordLink: "",
+    },
+
+    {
+      category: "management",
+      displayGroup: "studio",
+      featured: true,
+      featuredOrder: 5,
+      title: "SNC Management",
+      role: "Server Lead",
+      status: "Active",
+      banner: "sncbanner.png",
+      pfp: "sncpfp.png",
+      discordLink: "https://discord.gg/ZEE2VaSU9r"
+    },
+
+    {
+      category: "producer",
+      displayGroup: "studio",
+      featured: true,
+      featuredOrder: 8,
+      title: "ACT2",
+      role: "Game Designer",
+      status: "Active",
+      pfp: "act2.png",
+      banner: "act2banner.jpg",
+      link: "https://www.act2studios.co/",
+      discordLink: "",
+    },
+
+    {
+      category: "management",
+      displayGroup: "studio",
+      featured: true,
+      featuredOrder: 7,
+      title: "Fame",
+      role: "Director",
+      status: "Active",
+      banner: "famebanner.gif",
+      pfp: "Fame.png",
+      discordLabel: "Exclusive Networking Server",
     },
 
   ],
@@ -236,65 +283,22 @@ function safeExternalLink(element, url) {
   }
 }
 
-function renderCollaborations() {
-  const list = document.querySelector("#collaborator-list");
-  const emptyState = document.querySelector("#collaborations-empty");
-  const collaborators = Array.isArray(portfolioConfig.collaborations)
-    ? portfolioConfig.collaborations.filter((item) => item && item.name)
-    : [];
-
-  list.replaceChildren();
-  emptyState.hidden = collaborators.length > 0;
-
-  for (const collaborator of collaborators) {
-    const item = document.createElement("span");
-    item.className = "collaborator";
-
-    if (collaborator.logo) {
-      const image = document.createElement("img");
-      image.src = collaborator.logo;
-      image.alt = "";
-      image.loading = "lazy";
-      image.addEventListener("error", () => image.remove(), { once: true });
-      item.append(image);
-    }
-
-    const name = document.createElement("span");
-    name.textContent = collaborator.name;
-    item.append(name);
-
-    const link = collaborator.link ? document.createElement("a") : null;
-    if (link) {
-      link.className = "collaborator-link";
-      link.setAttribute("aria-label", `${collaborator.name} (external link)`);
-      safeExternalLink(link, collaborator.link);
-      if (link.hasAttribute("href")) {
-        const arrow = document.createElement("span");
-        arrow.className = "collaborator-arrow";
-        arrow.setAttribute("aria-hidden", "true");
-        arrow.textContent = "↗";
-        item.append(arrow);
-        link.append(item);
-        list.append(link);
-        continue;
-      }
-    }
-    list.append(item);
-  }
-}
-
 function updatePortfolio() {
   gameProjectGrid.replaceChildren();
   studioProjectGrid.replaceChildren();
   otherProjectGrid.replaceChildren();
   const validProjects = randomizedProjects.filter((project) =>
-    Object.prototype.hasOwnProperty.call(projectCategories, project.category));
+    Object.prototype.hasOwnProperty.call(projectCategories, project.category)
+      || (!project.category && project.displayGroup === "studio"));
+  const featuredProjects = validProjects
+    .filter((project) => project.featured)
+    .sort((first, second) => first.featuredOrder - second.featuredOrder);
   const projects = isWorkPage
     ? validProjects
-    : portfolioConfig.projects
-      .filter((project) => project.featured
-        && Object.prototype.hasOwnProperty.call(projectCategories, project.category))
-      .sort((first, second) => first.featuredOrder - second.featuredOrder);
+    : [
+      ...featuredProjects.filter((project) => project.displayGroup !== "studio"),
+      ...featuredProjects.filter((project) => project.displayGroup === "studio").slice(0, 2),
+    ].sort((first, second) => first.featuredOrder - second.featuredOrder);
 
   for (const project of projects) {
     const card = document.querySelector("#project-card-template").content.firstElementChild.cloneNode(true);
@@ -308,7 +312,10 @@ function updatePortfolio() {
 
     const tagList = card.querySelector(".project-tag-list");
     const categoryTag = projectCategories[project.category];
-    const tags = categoryTag ? [categoryTag] : [];
+    const tags = [
+      ...(categoryTag ? [categoryTag] : []),
+      ...(Array.isArray(project.tags) ? project.tags : []),
+    ].filter((tag) => typeof tag === "string" && tag.trim());
     if (tags.length === 0) {
       tagList.hidden = true;
     } else {
@@ -410,7 +417,7 @@ function updatePortfolio() {
       ["totalVisits", "Total visits"],
     ];
     const metrics = card.querySelector(".game-metrics");
-    if (!isOther) {
+    if (!isOther && !isStudio) {
       for (const [key, label] of metricDefinitions) {
         const metric = document.createElement("div");
         metric.className = "game-metric";
@@ -444,10 +451,16 @@ function updatePortfolio() {
           : isWebsiteGroup ? "Visit website" : "View project";
     }
     safeExternalLink(card.querySelector(".discord-server-link"), project.discordLink);
+    const discordLabel = card.querySelector(".discord-server-label");
+    if (project.discordLabel && !project.discordLink) {
+      discordLabel.textContent = project.discordLabel;
+      discordLabel.hidden = false;
+    }
     const cardDetails = card.querySelector(".game-card-details");
     cardDetails.hidden = metrics.children.length === 0
       && card.querySelector(".project-link").hidden
-      && card.querySelector(".discord-server-link").hidden;
+      && card.querySelector(".discord-server-link").hidden
+      && !isStudio;
     if (project.video) {
       const trigger = card.querySelector(".video-trigger");
       trigger.hidden = false;
@@ -703,7 +716,6 @@ document.addEventListener("keydown", (event) => {
 });
 
 document.querySelector("#current-year").textContent = new Date().getFullYear();
-if (document.querySelector("#collaborator-list")) renderCollaborations();
 updatePortfolio();
 observeReveals();
 trackActiveNavigation();
