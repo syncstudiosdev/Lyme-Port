@@ -1,8 +1,9 @@
 const portfolioConfig = {
   // Used to link directly to the Discord profile.
   discordUserId: "1270007167541575854",
-  profileAvatarImage: "pfp.jpg",
-  profileBannerImage: "banner.png",
+  discordProfileEndpoint: "/.netlify/functions/discord-profile",
+  profileAvatarFallback: "pfp.jpg",
+  profileBannerFallback: "banner.png",
   projects: [
     // PROJECT TEMPLATE: copy this object, then replace the example values.
     
@@ -166,7 +167,7 @@ const portfolioConfig = {
       featuredOrder: 6,
       title: "Overtake Studios",
       role: "Game Producer",
-      status: "Active",
+      status: "Retired",
       banner: "overtakebanner.png",
       pfp: "overtakepfp.png",
       peakCcu: "10k+",
@@ -548,11 +549,19 @@ function configureDiscordLinks() {
   if (note) note.textContent = "Send a message through my Discord profile.";
 }
 
-function loadProfileAvatar() {
-  const avatarUrl = portfolioConfig.profileAvatarImage;
+function loadProfileAvatar(avatarUrl = portfolioConfig.profileAvatarFallback) {
   const navName = document.querySelector("#nav-discord-name");
   if (!navName) return;
   const displayName = navName.textContent;
+  const transitionAvatar = document.querySelector(".page-transition img");
+  if (transitionAvatar) {
+    transitionAvatar.onerror = () => {
+      transitionAvatar.onerror = null;
+      transitionAvatar.src = portfolioConfig.profileAvatarFallback;
+    };
+    transitionAvatar.src = avatarUrl || portfolioConfig.profileAvatarFallback;
+  }
+
   const navAvatar = document.querySelector("#nav-avatar");
   const navFallback = document.querySelector("#nav-avatar-fallback");
   if (navAvatar && navFallback) setAvatar(navAvatar, navFallback, avatarUrl, displayName);
@@ -561,20 +570,218 @@ function loadProfileAvatar() {
   if (contactAvatar && contactFallback) setAvatar(contactAvatar, contactFallback, avatarUrl, displayName);
 }
 
-function loadProfileBanner() {
-  if (!portfolioConfig.profileBannerImage) return;
-
+function loadProfileBanner(bannerUrl = portfolioConfig.profileBannerFallback) {
+  if (!bannerUrl) return;
   const image = document.querySelector("#profile-banner-image");
   if (!image) return;
   const banner = image.closest(".profile-banner");
-  image.src = portfolioConfig.profileBannerImage;
+  image.src = bannerUrl;
   image.hidden = false;
   banner.classList.add("has-custom-banner");
   image.addEventListener("error", () => {
-    console.error(`Unable to load profile banner image: ${portfolioConfig.profileBannerImage}`);
+    console.error(`Unable to load profile banner image: ${bannerUrl}`);
     image.hidden = true;
     banner.classList.remove("has-custom-banner");
   }, { once: true });
+}
+
+function loadHeroBanner(bannerUrl = portfolioConfig.profileBannerFallback) {
+  if (!bannerUrl) return;
+  const safeUrl = bannerUrl.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  document.documentElement.style.setProperty("--hero-banner-image", `url("${safeUrl}")`);
+}
+
+function extractImageColors(imageUrl) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.onload = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = 48;
+        canvas.height = 48;
+        const context = canvas.getContext("2d", { willReadFrequently: true });
+        if (!context) throw new Error("Canvas is unavailable for Discord theme colors");
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+        const buckets = new Map();
+        for (let index = 0; index < pixels.length; index += 4) {
+          const red = pixels[index];
+          const green = pixels[index + 1];
+          const blue = pixels[index + 2];
+          const alpha = pixels[index + 3];
+          const high = Math.max(red, green, blue);
+          const low = Math.min(red, green, blue);
+          if (alpha < 200 || high < 35 || low > 238 || high - low < 24) continue;
+
+          const key = `${red >> 3},${green >> 3},${blue >> 3}`;
+          const bucket = buckets.get(key) || { red: 0, green: 0, blue: 0, count: 0 };
+          bucket.red += red;
+          bucket.green += green;
+          bucket.blue += blue;
+          bucket.count += 1;
+          buckets.set(key, bucket);
+        }
+
+        const colors = [...buckets.values()]
+          .map((bucket) => {
+            const rgb = [
+              Math.round(bucket.red / bucket.count),
+              Math.round(bucket.green / bucket.count),
+              Math.round(bucket.blue / bucket.count),
+            ];
+            const saturation = (Math.max(...rgb) - Math.min(...rgb)) / Math.max(...rgb);
+            return { rgb, count: bucket.count, saturation };
+          })
+          .sort((first, second) =>
+            second.count * (0.65 + second.saturation) - first.count * (0.65 + first.saturation)
+          );
+        resolve(colors);
+      } catch (error) {
+        reject(error);
+      }
+    };
+    image.onerror = () => reject(new Error("Unable to load a Discord image for theme colors"));
+    image.src = imageUrl;
+  });
+}
+
+function chooseImageColors(colors, count) {
+  const selected = [];
+  for (const color of colors) {
+    const distinct = selected.every((other) =>
+      Math.sqrt(color.rgb.reduce((sum, channel, index) =>
+        sum + (channel - other.rgb[index]) ** 2, 0
+      )) >= 65
+    );
+    if (distinct) selected.push(color);
+    if (selected.length === count) break;
+  }
+  return selected.map((color) => color.rgb);
+}
+
+function rgbToHsl([red, green, blue]) {
+  const values = [red, green, blue].map((channel) => channel / 255);
+  const low = Math.min(...values);
+  const high = Math.max(...values);
+  const delta = high - low;
+  let hue = 0;
+  const lightness = (high + low) / 2;
+  let saturation = 0;
+
+  if (delta) {
+    saturation = delta / (1 - Math.abs(2 * lightness - 1));
+    if (high === values[0]) hue = ((values[1] - values[2]) / delta) % 6;
+    else if (high === values[1]) hue = (values[2] - values[0]) / delta + 2;
+    else hue = (values[0] - values[1]) / delta + 4;
+    hue *= 60;
+    if (hue < 0) hue += 360;
+  }
+  return [hue, saturation, lightness];
+}
+
+function hslToRgb([hue, saturation, lightness]) {
+  const chroma = (1 - Math.abs(2 * lightness - 1)) * saturation;
+  const section = hue / 60;
+  const secondary = chroma * (1 - Math.abs(section % 2 - 1));
+  const [red, green, blue] = section < 1 ? [chroma, secondary, 0]
+    : section < 2 ? [secondary, chroma, 0]
+      : section < 3 ? [0, chroma, secondary]
+        : section < 4 ? [0, secondary, chroma]
+          : section < 5 ? [secondary, 0, chroma]
+            : [chroma, 0, secondary];
+  const offset = lightness - chroma / 2;
+  return [red, green, blue].map((channel) => Math.round((channel + offset) * 255));
+}
+
+function cssRgb([red, green, blue]) {
+  return `${red}, ${green}, ${blue}`;
+}
+
+function applyDiscordTheme(avatarUrl, bannerUrl) {
+  Promise.all([extractImageColors(avatarUrl), extractImageColors(bannerUrl)])
+    .then(([avatarColors, bannerColors]) => {
+      const avatar = chooseImageColors(avatarColors, 1)[0];
+      const [bannerPrimary, bannerSecondary] = chooseImageColors(bannerColors, 2);
+      if (!avatar || !bannerPrimary || !bannerSecondary) return;
+
+      const hues = [avatar, bannerPrimary, bannerSecondary].map((color) => rgbToHsl(color)[0]);
+      const radians = hues.map((hue) => hue * Math.PI / 180);
+      const sharedHue = (Math.atan2(
+        radians.reduce((sum, angle) => sum + Math.sin(angle), 0),
+        radians.reduce((sum, angle) => sum + Math.cos(angle), 0)
+      ) * 180 / Math.PI + 360) % 360;
+      const palette = [avatar, bannerPrimary, bannerSecondary].map((color, index) => {
+        const [hue, saturation] = rgbToHsl(color);
+        const hueDifference = ((sharedHue - hue + 540) % 360) - 180;
+        return hslToRgb([
+          (hue + hueDifference * 0.16 + 360) % 360,
+          Math.max(0.48, Math.min(0.82, saturation)),
+          [0.68, 0.76, 0.56][index],
+        ]);
+      });
+      const [avatarAccent, bannerAccent, bannerShade] = palette;
+      const root = document.documentElement;
+      root.style.setProperty("--accent", `rgb(${cssRgb(avatarAccent)})`);
+      root.style.setProperty("--accent-rgb", cssRgb(avatarAccent));
+      root.style.setProperty("--accent-secondary", `rgb(${cssRgb(bannerAccent)})`);
+      root.style.setProperty("--accent-secondary-rgb", cssRgb(bannerAccent));
+      root.style.setProperty("--nav-tint-start", `rgb(${cssRgb(avatarAccent)})`);
+      root.style.setProperty("--nav-tint-end", `rgb(${cssRgb(bannerShade)})`);
+
+      document.body.style.setProperty("--nav-tint-start", `rgb(${cssRgb(avatarAccent)})`);
+      document.body.style.setProperty("--nav-tint-end", `rgb(${cssRgb(bannerShade)})`);
+      document.body.style.setProperty("--page", `hsl(${sharedHue.toFixed(1)} 25% 7%)`);
+      document.body.style.setProperty("--panel", `hsl(${sharedHue.toFixed(1)} 24% 10%)`);
+    })
+    .catch((error) => console.warn("Unable to derive the theme from Discord images:", error));
+}
+
+async function loadDiscordProfile() {
+  const userId = portfolioConfig.discordUserId.trim();
+  if (!/^\d{17,20}$/.test(userId)) {
+    loadProfileAvatar();
+    loadProfileBanner();
+    loadHeroBanner();
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `${portfolioConfig.discordProfileEndpoint}?id=${encodeURIComponent(userId)}`,
+      { headers: { Accept: "application/json" } }
+    );
+    if (!response.ok) throw new Error(`Discord profile request failed: ${response.status}`);
+    const profile = await response.json();
+
+    if (profile.avatarUrl) loadProfileAvatar(profile.avatarUrl);
+    else loadProfileAvatar();
+
+    if (profile.bannerUrl) loadProfileBanner(profile.bannerUrl);
+    else loadProfileBanner();
+    if (profile.bannerUrl) loadHeroBanner(profile.bannerUrl);
+    else loadHeroBanner();
+    if (profile.avatarUrl && profile.bannerUrl) {
+      applyDiscordTheme(profile.avatarUrl, profile.bannerUrl);
+    }
+
+    if (profile.username) {
+      for (const name of document.querySelectorAll("#nav-discord-name, #contact-discord-name")) {
+        name.textContent = profile.displayName || profile.username;
+      }
+      const navAvatar = document.querySelector("#nav-avatar");
+      const contactAvatar = document.querySelector("#contact-avatar");
+      const displayName = profile.displayName || profile.username;
+      if (navAvatar) navAvatar.alt = `${displayName}’s profile picture`;
+      if (contactAvatar) contactAvatar.alt = `${displayName}’s profile picture`;
+    }
+  } catch (error) {
+    console.warn(error);
+    loadProfileAvatar();
+    loadProfileBanner();
+    loadHeroBanner();
+  }
 }
 
 function enableProfileTilt() {
@@ -721,6 +928,5 @@ observeReveals();
 trackActiveNavigation();
 enableProfileTilt();
 enablePageTransitions();
-loadProfileAvatar();
-loadProfileBanner();
+loadDiscordProfile();
 configureDiscordLinks();

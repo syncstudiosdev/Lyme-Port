@@ -8,7 +8,7 @@ Open `index.html` in a browser, or serve this folder with any static file server
 
 Page loads and navigation between pages use a short transition featuring the profile picture; it is disabled when reduced motion is enabled in the visitor's system settings.
 
-The home page is arranged as **Home**, **About me**, **What I do**, **Work**, and **Contact**. To change the home hero image, replace the `--hero-banner-image` URL near the top of `styles.css`; the dark overlay keeps the text readable.
+The home page is arranged as **Home**, **About me**, **What I do**, **Work**, and **Contact**. The Discord banner is used for the home hero when available; the `--hero-banner-image` URL near the top of `styles.css` is its fallback. The dark overlay keeps the text readable.
 
 The warm gold accents (`#f4c462` and `#fdedb0`) and dark background are controlled by the color variables near the top of `styles.css`.
 
@@ -80,9 +80,9 @@ In `portfolio.js`, add an object to `portfolioConfig.projects` for each studio o
 
 ## Profile images and links
 
-Set `profileAvatarImage` and `profileBannerImage` in `portfolio.js` to local image paths. The avatar is used in both the navigation bar and contact profile. Leave the banner path empty to use the built-in background, or set it to your own image.
+The avatar and banner are fetched through the Netlify Discord profile function. Set `DISCORD_API_TOKEN` in Netlify's environment variables, and keep `discordUserId` set in `portfolio.js`. The API token is never sent to the browser. The Discord avatar is used in the navigation, contact profile, and page transition animation, with `pfp.jpg` as a fallback. Discord's banner is also used as the home hero background when available. The site samples one accent color from the avatar and two from the banner, then harmonizes them for the site's color theme.
 
-Set `discordUserId` in `portfolio.js` to link the navigation profile and contact button to your Discord profile. The site uses the ID only to build the link and does not fetch profile data from Discord.
+Set `discordUserId` in `portfolio.js` to link the navigation profile and contact button to your Discord profile and fetch its avatar and banner through Netlify.
 
 ## Customize
 
