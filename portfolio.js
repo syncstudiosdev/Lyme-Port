@@ -2,8 +2,6 @@ const portfolioConfig = {
   // Used to link directly to the Discord profile.
   discordUserId: "1270007167541575854",
   discordProfileEndpoint: "/.netlify/functions/discord-profile",
-  profileAvatarFallback: "pfp.jpg",
-  profileBannerFallback: "banner.png",
   projects: [
     // PROJECT TEMPLATE: copy this object, then replace the example values.
     
@@ -523,16 +521,42 @@ function setAvatar(image, fallback, url, name) {
   if (!url) {
     image.hidden = true;
     fallback.hidden = false;
-    return;
+    return Promise.resolve(false);
   }
-  image.src = url;
   image.alt = `${name}’s profile picture`;
   image.hidden = false;
   fallback.hidden = true;
-  image.addEventListener("error", () => {
-    image.hidden = true;
-    fallback.hidden = false;
-  }, { once: true });
+
+  return new Promise((resolve) => {
+    let timeoutId;
+    const finish = (loaded) => {
+      window.clearTimeout(timeoutId);
+      image.onload = null;
+      image.onerror = null;
+      if (!loaded) {
+        image.hidden = true;
+        fallback.hidden = false;
+      }
+      resolve(loaded);
+    };
+    image.onload = () => finish(true);
+    image.onerror = () => {
+      console.error("Unable to load Discord profile avatar");
+      finish(false);
+    };
+    timeoutId = window.setTimeout(() => {
+      console.error("Timed out loading Discord profile avatar");
+      finish(false);
+    }, 12000);
+    image.src = url;
+    if (image.complete) {
+      if (image.naturalWidth > 0) finish(true);
+      else {
+        console.error("Unable to load Discord profile avatar");
+        finish(false);
+      }
+    }
+  });
 }
 
 function configureDiscordLinks() {
@@ -549,44 +573,108 @@ function configureDiscordLinks() {
   if (note) note.textContent = "Send a message through my Discord profile.";
 }
 
-function loadProfileAvatar(avatarUrl = portfolioConfig.profileAvatarFallback) {
-  const navName = document.querySelector("#nav-discord-name");
-  if (!navName) return;
-  const displayName = navName.textContent;
-  const transitionAvatar = document.querySelector(".page-transition img");
-  if (transitionAvatar) {
-    transitionAvatar.onerror = () => {
-      transitionAvatar.onerror = null;
-      transitionAvatar.src = portfolioConfig.profileAvatarFallback;
-    };
-    transitionAvatar.src = avatarUrl || portfolioConfig.profileAvatarFallback;
+function loadTransitionAvatar(avatarUrl) {
+  const image = document.querySelector(".page-transition-avatar");
+  if (!image) return Promise.resolve(false);
+  if (!avatarUrl) {
+    image.hidden = true;
+    image.removeAttribute("src");
+    return Promise.resolve(false);
   }
 
+  return new Promise((resolve) => {
+    let timeoutId;
+    const finish = (loaded) => {
+      window.clearTimeout(timeoutId);
+      image.onload = null;
+      image.onerror = null;
+      image.hidden = !loaded;
+      if (!loaded) image.removeAttribute("src");
+      resolve(loaded);
+    };
+    image.onload = () => finish(true);
+    image.onerror = () => {
+      console.error("Unable to load Discord avatar for the page transition");
+      finish(false);
+    };
+    timeoutId = window.setTimeout(() => {
+      console.error("Timed out loading Discord avatar for the page transition");
+      finish(false);
+    }, 12000);
+    image.src = avatarUrl;
+    if (image.complete) finish(image.naturalWidth > 0);
+  });
+}
+
+function loadProfileAvatar(avatarUrl) {
+  const navName = document.querySelector("#nav-discord-name");
+  const displayName = navName ? navName.textContent : "Discord profile";
   const navAvatar = document.querySelector("#nav-avatar");
   const navFallback = document.querySelector("#nav-avatar-fallback");
-  if (navAvatar && navFallback) setAvatar(navAvatar, navFallback, avatarUrl, displayName);
   const contactAvatar = document.querySelector("#contact-avatar");
   const contactFallback = document.querySelector("#contact-avatar-fallback");
-  if (contactAvatar && contactFallback) setAvatar(contactAvatar, contactFallback, avatarUrl, displayName);
+  const avatarLoads = [loadTransitionAvatar(avatarUrl)];
+  if (navAvatar && navFallback) avatarLoads.push(setAvatar(navAvatar, navFallback, avatarUrl, displayName));
+  if (contactAvatar && contactFallback) {
+    avatarLoads.push(setAvatar(contactAvatar, contactFallback, avatarUrl, displayName));
+  }
+
+  return Promise.all(avatarLoads);
 }
 
-function loadProfileBanner(bannerUrl = portfolioConfig.profileBannerFallback) {
-  if (!bannerUrl) return;
+function loadProfileBanner(bannerUrl) {
+  loadHeroBanner(bannerUrl);
   const image = document.querySelector("#profile-banner-image");
-  if (!image) return;
+  if (!image) return Promise.resolve(Boolean(bannerUrl));
   const banner = image.closest(".profile-banner");
-  image.src = bannerUrl;
-  image.hidden = false;
-  banner.classList.add("has-custom-banner");
-  image.addEventListener("error", () => {
-    console.error(`Unable to load profile banner image: ${bannerUrl}`);
+  if (!bannerUrl) {
     image.hidden = true;
+    image.removeAttribute("src");
     banner.classList.remove("has-custom-banner");
-  }, { once: true });
+    return Promise.resolve(false);
+  }
+
+  return new Promise((resolve) => {
+    let timeoutId;
+    const finish = (loaded) => {
+      window.clearTimeout(timeoutId);
+      image.onload = null;
+      image.onerror = null;
+      if (!loaded) {
+        image.hidden = true;
+        image.removeAttribute("src");
+        banner.classList.remove("has-custom-banner");
+        loadHeroBanner();
+      }
+      resolve(loaded);
+    };
+    image.onload = () => finish(true);
+    image.onerror = () => {
+      console.error(`Unable to load profile banner image: ${bannerUrl}`);
+      finish(false);
+    };
+    timeoutId = window.setTimeout(() => {
+      console.error("Timed out loading Discord profile banner");
+      finish(false);
+    }, 12000);
+    image.hidden = false;
+    banner.classList.add("has-custom-banner");
+    image.src = bannerUrl;
+    if (image.complete) {
+      if (image.naturalWidth > 0) finish(true);
+      else {
+        console.error(`Unable to load profile banner image: ${bannerUrl}`);
+        finish(false);
+      }
+    }
+  });
 }
 
-function loadHeroBanner(bannerUrl = portfolioConfig.profileBannerFallback) {
-  if (!bannerUrl) return;
+function loadHeroBanner(bannerUrl) {
+  if (!bannerUrl) {
+    document.documentElement.style.setProperty("--hero-banner-image", "none");
+    return;
+  }
   const safeUrl = bannerUrl.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
   document.documentElement.style.setProperty("--hero-banner-image", `url("${safeUrl}")`);
 }
@@ -595,7 +683,13 @@ function extractImageColors(imageUrl) {
   return new Promise((resolve, reject) => {
     const image = new Image();
     image.crossOrigin = "anonymous";
+    const timeoutId = window.setTimeout(() => {
+      image.onload = null;
+      image.onerror = null;
+      reject(new Error("Timed out reading a Discord image for theme colors"));
+    }, 12000);
     image.onload = () => {
+      window.clearTimeout(timeoutId);
       try {
         const canvas = document.createElement("canvas");
         canvas.width = 48;
@@ -642,7 +736,10 @@ function extractImageColors(imageUrl) {
         reject(error);
       }
     };
-    image.onerror = () => reject(new Error("Unable to load a Discord image for theme colors"));
+    image.onerror = () => {
+      window.clearTimeout(timeoutId);
+      reject(new Error("Unable to load a Discord image for theme colors"));
+    };
     image.src = imageUrl;
   });
 }
@@ -699,88 +796,91 @@ function cssRgb([red, green, blue]) {
   return `${red}, ${green}, ${blue}`;
 }
 
-function applyDiscordTheme(avatarUrl, bannerUrl) {
-  Promise.all([extractImageColors(avatarUrl), extractImageColors(bannerUrl)])
-    .then(([avatarColors, bannerColors]) => {
-      const avatar = chooseImageColors(avatarColors, 1)[0];
-      const [bannerPrimary, bannerSecondary] = chooseImageColors(bannerColors, 2);
-      if (!avatar || !bannerPrimary || !bannerSecondary) return;
+async function applyDiscordTheme(avatarUrl, bannerUrl) {
+  try {
+    const [avatarColors, bannerColors] = await Promise.all([
+      extractImageColors(avatarUrl),
+      extractImageColors(bannerUrl),
+    ]);
+    const avatar = chooseImageColors(avatarColors, 1)[0];
+    const [bannerPrimary, bannerSecondary] = chooseImageColors(bannerColors, 2);
+    if (!avatar || !bannerPrimary || !bannerSecondary) return false;
 
-      const hues = [avatar, bannerPrimary, bannerSecondary].map((color) => rgbToHsl(color)[0]);
-      const radians = hues.map((hue) => hue * Math.PI / 180);
-      const sharedHue = (Math.atan2(
-        radians.reduce((sum, angle) => sum + Math.sin(angle), 0),
-        radians.reduce((sum, angle) => sum + Math.cos(angle), 0)
-      ) * 180 / Math.PI + 360) % 360;
-      const palette = [avatar, bannerPrimary, bannerSecondary].map((color, index) => {
-        const [hue, saturation] = rgbToHsl(color);
-        const hueDifference = ((sharedHue - hue + 540) % 360) - 180;
-        return hslToRgb([
-          (hue + hueDifference * 0.16 + 360) % 360,
-          Math.max(0.48, Math.min(0.82, saturation)),
-          [0.68, 0.76, 0.56][index],
-        ]);
-      });
-      const [avatarAccent, bannerAccent, bannerShade] = palette;
-      const root = document.documentElement;
-      root.style.setProperty("--accent", `rgb(${cssRgb(avatarAccent)})`);
-      root.style.setProperty("--accent-rgb", cssRgb(avatarAccent));
-      root.style.setProperty("--accent-secondary", `rgb(${cssRgb(bannerAccent)})`);
-      root.style.setProperty("--accent-secondary-rgb", cssRgb(bannerAccent));
-      root.style.setProperty("--nav-tint-start", `rgb(${cssRgb(avatarAccent)})`);
-      root.style.setProperty("--nav-tint-end", `rgb(${cssRgb(bannerShade)})`);
+    const hues = [avatar, bannerPrimary, bannerSecondary].map((color) => rgbToHsl(color)[0]);
+    const radians = hues.map((hue) => hue * Math.PI / 180);
+    const sharedHue = (Math.atan2(
+      radians.reduce((sum, angle) => sum + Math.sin(angle), 0),
+      radians.reduce((sum, angle) => sum + Math.cos(angle), 0)
+    ) * 180 / Math.PI + 360) % 360;
+    const palette = [avatar, bannerPrimary, bannerSecondary].map((color, index) => {
+      const [hue, saturation] = rgbToHsl(color);
+      const hueDifference = ((sharedHue - hue + 540) % 360) - 180;
+      return hslToRgb([
+        (hue + hueDifference * 0.16 + 360) % 360,
+        Math.max(0.48, Math.min(0.82, saturation)),
+        [0.68, 0.76, 0.56][index],
+      ]);
+    });
+    const [avatarAccent, bannerAccent, bannerShade] = palette;
+    const root = document.documentElement;
+    root.style.setProperty("--accent", `rgb(${cssRgb(avatarAccent)})`);
+    root.style.setProperty("--accent-rgb", cssRgb(avatarAccent));
+    root.style.setProperty("--accent-secondary", `rgb(${cssRgb(bannerAccent)})`);
+    root.style.setProperty("--accent-secondary-rgb", cssRgb(bannerAccent));
+    root.style.setProperty("--nav-tint-start", `rgb(${cssRgb(avatarAccent)})`);
+    root.style.setProperty("--nav-tint-end", `rgb(${cssRgb(bannerShade)})`);
 
-      document.body.style.setProperty("--nav-tint-start", `rgb(${cssRgb(avatarAccent)})`);
-      document.body.style.setProperty("--nav-tint-end", `rgb(${cssRgb(bannerShade)})`);
-      document.body.style.setProperty("--page", `hsl(${sharedHue.toFixed(1)} 25% 7%)`);
-      document.body.style.setProperty("--panel", `hsl(${sharedHue.toFixed(1)} 24% 10%)`);
-    })
-    .catch((error) => console.warn("Unable to derive the theme from Discord images:", error));
+    document.body.style.setProperty("--nav-tint-start", `rgb(${cssRgb(avatarAccent)})`);
+    document.body.style.setProperty("--nav-tint-end", `rgb(${cssRgb(bannerShade)})`);
+    document.body.style.setProperty("--page", `hsl(${sharedHue.toFixed(1)} 25% 7%)`);
+    document.body.style.setProperty("--panel", `hsl(${sharedHue.toFixed(1)} 24% 10%)`);
+    return true;
+  } catch (error) {
+    console.warn("Unable to derive the theme from Discord images:", error);
+    return false;
+  }
 }
 
 async function loadDiscordProfile() {
   const userId = portfolioConfig.discordUserId.trim();
   if (!/^\d{17,20}$/.test(userId)) {
-    loadProfileAvatar();
-    loadProfileBanner();
-    loadHeroBanner();
+    await Promise.all([loadProfileAvatar(), loadProfileBanner()]);
     return;
   }
 
   try {
-    const response = await fetch(
-      `${portfolioConfig.discordProfileEndpoint}?id=${encodeURIComponent(userId)}`,
-      { headers: { Accept: "application/json" } }
-    );
-    if (!response.ok) throw new Error(`Discord profile request failed: ${response.status}`);
-    const profile = await response.json();
-
-    if (profile.avatarUrl) loadProfileAvatar(profile.avatarUrl);
-    else loadProfileAvatar();
-
-    if (profile.bannerUrl) loadProfileBanner(profile.bannerUrl);
-    else loadProfileBanner();
-    if (profile.bannerUrl) loadHeroBanner(profile.bannerUrl);
-    else loadHeroBanner();
-    if (profile.avatarUrl && profile.bannerUrl) {
-      applyDiscordTheme(profile.avatarUrl, profile.bannerUrl);
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 12000);
+    let profile;
+    try {
+      const response = await fetch(
+        `${portfolioConfig.discordProfileEndpoint}?id=${encodeURIComponent(userId)}`,
+        { headers: { Accept: "application/json" }, signal: controller.signal }
+      );
+      if (!response.ok) throw new Error(`Discord profile request failed: ${response.status}`);
+      profile = await response.json();
+    } finally {
+      window.clearTimeout(timeoutId);
     }
 
     if (profile.username) {
       for (const name of document.querySelectorAll("#nav-discord-name, #contact-discord-name")) {
         name.textContent = profile.displayName || profile.username;
       }
-      const navAvatar = document.querySelector("#nav-avatar");
-      const contactAvatar = document.querySelector("#contact-avatar");
-      const displayName = profile.displayName || profile.username;
-      if (navAvatar) navAvatar.alt = `${displayName}’s profile picture`;
-      if (contactAvatar) contactAvatar.alt = `${displayName}’s profile picture`;
     }
+
+    const pendingLoads = [
+      loadProfileAvatar(profile.avatarUrl),
+      loadProfileBanner(profile.bannerUrl),
+      profile.avatarUrl && profile.bannerUrl
+        ? applyDiscordTheme(profile.avatarUrl, profile.bannerUrl)
+        : Promise.resolve(false),
+    ];
+    const [, , themeApplied] = await Promise.all(pendingLoads);
+    if (themeApplied) document.body.classList.add("discord-theme-ready");
   } catch (error) {
     console.warn(error);
-    loadProfileAvatar();
-    loadProfileBanner();
-    loadHeroBanner();
+    await Promise.all([loadProfileAvatar(), loadProfileBanner()]);
   }
 }
 
@@ -928,5 +1028,11 @@ observeReveals();
 trackActiveNavigation();
 enableProfileTilt();
 enablePageTransitions();
-loadDiscordProfile();
+loadDiscordProfile().then(
+  () => document.body.classList.add("profile-ready"),
+  (error) => {
+    console.error("Unable to initialize the Discord profile:", error);
+    document.body.classList.add("profile-ready");
+  }
+);
 configureDiscordLinks();

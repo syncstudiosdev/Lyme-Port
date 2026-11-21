@@ -6,11 +6,11 @@ A responsive, dependency-free portfolio site built with plain HTML, CSS, and Jav
 
 Open `index.html` in a browser, or serve this folder with any static file server. Local media works when served over localhost; publish all project media files alongside the site.
 
-Page loads and navigation between pages use a short transition featuring the profile picture; it is disabled when reduced motion is enabled in the visitor's system settings.
+Page loads and navigation between pages use a short loading transition that waits for the Discord profile and theme; reduced-motion settings disable the animation.
 
-The home page is arranged as **Home**, **About me**, **What I do**, **Work**, and **Contact**. The Discord banner is used for the home hero when available; the `--hero-banner-image` URL near the top of `styles.css` is its fallback. The dark overlay keeps the text readable.
+The home page is arranged as **Home**, **About me**, **What I do**, **Work**, and **Contact**. The Discord banner is used for the home hero when available; without one, the hero uses its gradient background. The dark overlay keeps the text readable.
 
-The warm gold accents (`#f4c462` and `#fdedb0`) and dark background are controlled by the color variables near the top of `styles.css`.
+The fallback theme is black, white, and gray. The loading screen changes to your Discord avatar and derived colors before revealing the page. Game, studio, and other project banners and icons remain in their original colors during fallback; Discord profile colors replace the grayscale theme when available.
 
 ## Add work cards
 
@@ -80,7 +80,7 @@ In `portfolio.js`, add an object to `portfolioConfig.projects` for each studio o
 
 ## Profile images and links
 
-The avatar and banner are fetched through the Netlify Discord profile function. Set `DISCORD_API_TOKEN` in Netlify's environment variables, and keep `discordUserId` set in `portfolio.js`. The API token is never sent to the browser. The Discord avatar is used in the navigation, contact profile, and page transition animation, with `pfp.jpg` as a fallback. Discord's banner is also used as the home hero background when available. The site samples one accent color from the avatar and two from the banner, then harmonizes them for the site's color theme.
+The avatar and banner are fetched through the Netlify Discord profile function. Set `DISCORD_API_TOKEN` in Netlify's environment variables, and keep `discordUserId` set in `portfolio.js`. The API token is never sent to the browser. Discord's avatar is used in the navigation and contact profile, with no local profile-image fallback; `webicon.jpg` is the favicon. Discord's banner is used as the home hero background when available; without one, the hero and profile card use their gradient backgrounds. The site samples one accent color from the avatar and two from the banner, then harmonizes them for the site's color theme. The overall site stays grayscale until that palette is applied, and the page transition remains visible until profile loading completes or fails.
 
 Set `discordUserId` in `portfolio.js` to link the navigation profile and contact button to your Discord profile and fetch its avatar and banner through Netlify.
 
