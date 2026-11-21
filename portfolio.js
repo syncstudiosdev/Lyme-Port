@@ -796,6 +796,46 @@ function cssRgb([red, green, blue]) {
   return `${red}, ${green}, ${blue}`;
 }
 
+function applyThemePalette({ avatarAccent, bannerAccent, bannerShade, sharedHue }) {
+  const root = document.documentElement;
+  root.style.setProperty("--accent", `rgb(${cssRgb(avatarAccent)})`);
+  root.style.setProperty("--accent-rgb", cssRgb(avatarAccent));
+  root.style.setProperty("--accent-secondary", `rgb(${cssRgb(bannerAccent)})`);
+  root.style.setProperty("--accent-secondary-rgb", cssRgb(bannerAccent));
+  root.style.setProperty("--nav-tint-start", `rgb(${cssRgb(avatarAccent)})`);
+  root.style.setProperty("--nav-tint-end", `rgb(${cssRgb(bannerShade)})`);
+
+  document.body.style.setProperty("--nav-tint-start", `rgb(${cssRgb(avatarAccent)})`);
+  document.body.style.setProperty("--nav-tint-end", `rgb(${cssRgb(bannerShade)})`);
+  document.body.style.setProperty("--page", `hsl(${sharedHue.toFixed(1)} 25% 7%)`);
+  document.body.style.setProperty("--panel", `hsl(${sharedHue.toFixed(1)} 24% 10%)`);
+}
+
+function restoreCachedDiscordTheme() {
+  const cacheKey = `discord-theme-${portfolioConfig.discordUserId}`;
+  try {
+    const cachedValue = sessionStorage.getItem(cacheKey);
+    if (!cachedValue) return false;
+    const cached = JSON.parse(cachedValue);
+    if (!cached || typeof cached !== "object") return false;
+    const colors = [cached.avatarAccent, cached.bannerAccent, cached.bannerShade];
+    if (cached.userId !== portfolioConfig.discordUserId
+      || !Number.isFinite(cached.sharedHue) || cached.sharedHue < 0 || cached.sharedHue > 360
+      || !Array.isArray(colors)
+      || colors.some((color) => !Array.isArray(color) || color.length !== 3
+        || color.some((channel) => !Number.isInteger(channel) || channel < 0 || channel > 255))) {
+      return false;
+    }
+
+    applyThemePalette(cached);
+    document.body.classList.add("discord-theme-ready");
+    return true;
+  } catch (error) {
+    console.warn("Unable to restore the cached Discord theme:", error);
+    return false;
+  }
+}
+
 async function applyDiscordTheme(avatarUrl, bannerUrl) {
   try {
     const [avatarColors, bannerColors] = await Promise.all([
@@ -822,18 +862,19 @@ async function applyDiscordTheme(avatarUrl, bannerUrl) {
       ]);
     });
     const [avatarAccent, bannerAccent, bannerShade] = palette;
-    const root = document.documentElement;
-    root.style.setProperty("--accent", `rgb(${cssRgb(avatarAccent)})`);
-    root.style.setProperty("--accent-rgb", cssRgb(avatarAccent));
-    root.style.setProperty("--accent-secondary", `rgb(${cssRgb(bannerAccent)})`);
-    root.style.setProperty("--accent-secondary-rgb", cssRgb(bannerAccent));
-    root.style.setProperty("--nav-tint-start", `rgb(${cssRgb(avatarAccent)})`);
-    root.style.setProperty("--nav-tint-end", `rgb(${cssRgb(bannerShade)})`);
-
-    document.body.style.setProperty("--nav-tint-start", `rgb(${cssRgb(avatarAccent)})`);
-    document.body.style.setProperty("--nav-tint-end", `rgb(${cssRgb(bannerShade)})`);
-    document.body.style.setProperty("--page", `hsl(${sharedHue.toFixed(1)} 25% 7%)`);
-    document.body.style.setProperty("--panel", `hsl(${sharedHue.toFixed(1)} 24% 10%)`);
+    const theme = {
+      userId: portfolioConfig.discordUserId,
+      avatarAccent,
+      bannerAccent,
+      bannerShade,
+      sharedHue,
+    };
+    applyThemePalette(theme);
+    try {
+      sessionStorage.setItem(`discord-theme-${portfolioConfig.discordUserId}`, JSON.stringify(theme));
+    } catch (error) {
+      console.warn("Unable to cache the Discord theme:", error);
+    }
     return true;
   } catch (error) {
     console.warn("Unable to derive the theme from Discord images:", error);
@@ -1028,6 +1069,7 @@ observeReveals();
 trackActiveNavigation();
 enableProfileTilt();
 enablePageTransitions();
+restoreCachedDiscordTheme();
 loadDiscordProfile().then(
   () => document.body.classList.add("profile-ready"),
   (error) => {

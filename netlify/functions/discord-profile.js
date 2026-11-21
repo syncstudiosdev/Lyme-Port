@@ -1,7 +1,7 @@
 exports.handler = async (event) => {
   const headers = {
     "Content-Type": "application/json",
-    "Cache-Control": "public, max-age=300, s-maxage=300",
+    "Cache-Control": "public, max-age=60, s-maxage=60",
   };
 
   const userId = event.queryStringParameters?.id;
@@ -31,12 +31,15 @@ exports.handler = async (event) => {
     }
 
     const user = await response.json();
-    const avatarUrl = user.avatar
-      ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${user.avatar.startsWith("a_") ? "gif" : "png"}?size=256`
-      : null;
-    const bannerUrl = user.banner
-      ? `https://cdn.discordapp.com/banners/${user.id}/${user.banner}.${user.banner.startsWith("a_") ? "gif" : "png"}?size=1024`
-      : null;
+    const discordImageUrl = (asset, hash, size) => {
+      if (!hash) return null;
+      const animated = hash.startsWith("a_");
+      const format = animated ? "webp" : "png";
+      const animationParameter = animated ? "&animated=true" : "";
+      return `https://cdn.discordapp.com/${asset}/${user.id}/${hash}.${format}?size=${size}${animationParameter}`;
+    };
+    const avatarUrl = discordImageUrl("avatars", user.avatar, 256);
+    const bannerUrl = discordImageUrl("banners", user.banner, 1024);
 
     return {
       statusCode: 200,
